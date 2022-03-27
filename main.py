@@ -174,19 +174,20 @@ def battle(current_enemy, player_data):
     enemy.maxhp = enemy.maxhp[0]
     enemy.attack = enemy.attack[0]
     while fight:
-        clear()
-        print(f"Defeat the {enemy.name}!")
-        print(line)
-        print(f"{enemy.name}'s HP: {enemy.hp}/{enemy.maxhp}")
-        print(f"{player_data.name}'s HP: {player_data.HP}/{player_data.MAXHP}")
-        print(f"{player_data.name}'s MP: {player_data.MP}/{player_data.MAXMP}")
-        print(line)
-        print(f"1 - Attack")
-        print(f"2 - Magic")
-        print(f"3 - Inventory")
-        print(line)
-        action = input("> ")
+
         while True:
+            clear()
+            print(f"Defeat the {enemy.name}!")
+            print(line)
+            print(f"{enemy.name}'s HP: {enemy.hp}/{enemy.maxhp}")
+            print(f"{player_data.name}'s HP: {player_data.HP}/{player_data.MAXHP}")
+            print(f"{player_data.name}'s MP: {player_data.MP}/{player_data.MAXMP}")
+            print(line)
+            print(f"1 - Attack")
+            print(f"2 - Magic")
+            print(f"3 - Inventory")
+            print(line)
+            action = input("> ")
             match action.split():
                 case ["1"] | ["Attack"]:
                     # TODO - Make attack a range based on attack strength
