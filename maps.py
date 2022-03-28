@@ -2,55 +2,55 @@
 
 map1 = [
     # x = 0    x = 1        x = 2      x = 3     x = 4     x = 5         x = 6
-    ["plains", "plains",    "plains",  "plains", "forest", "mountain",   "cave"],      # y = 0
-    ["forest", "forest",    "forest",  "forest", "forest", "hills",      "mountain"],  # y = 1
-    ["forest", "fields",    "bridge",  "plains", "hills",  "forest",     "hills"],     # y = 2
-    ["plains", "item_shop", "town",    "mayor",  "plains", "hills",      "mountain"],  # y = 3
-    ["plains", "fields",    "fields",  "plains", "hills",  "magic_shop", "mountain"]   # y = 4
+    [{"type": "PLAINS    ", "visible": True}, {"type": "PLAINS    ", "visible": False}, {"type": "PLAINS    ", "visible": False},  {"type": "PLAINS    ", "visible": False}, {"type": "FOREST    ", "visible": False}, {"type": "MOUNTAIN  ", "visible": False}, {"type": "CAVE      ", "visible": False}],  # y = 0
+    [{"type": "FOREST    ", "visible": False}, {"type": "FOREST    ", "visible": False}, {"type": "FOREST    ", "visible": False}, {"type": "FOREST    ", "visible": False}, {"type": "FOREST    ", "visible": False}, {"type": "HILLS     ", "visible": False}, {"type": "MOUNTAIN  ", "visible": False}],  # y = 1
+    [{"type": "FOREST    ", "visible": False}, {"type": "FIELDS    ", "visible": False}, {"type": "BRIDGE    ", "visible": False}, {"type": "PLAINS    ", "visible": False}, {"type": "HILLS     ", "visible": False}, {"type": "FOREST    ", "visible": False}, {"type": "HILLS     ", "visible": False}],  # y = 2
+    [{"type": "PLAINS    ", "visible": False}, {"type": "ITEM_SHOP ", "visible": False}, {"type": "TOWN      ", "visible": False}, {"type": "MAYOR     ", "visible": False}, {"type": "PLAINS    ", "visible": False}, {"type": "HILLS     ", "visible": False}, {"type": "MOUNTAIN  ", "visible": False}],  # y = 3
+    [{"type": "PLAINS    ", "visible": False}, {"type": "FIELDS    ", "visible": False}, {"type": "FIELDS    ", "visible": False}, {"type": "PLAINS    ", "visible": False}, {"type": "HILLS     ", "visible": False}, {"type": "MAGIC_SHOP", "visible": False}, {"type": "MOUNTAIN  ", "visible": False}]   # y = 4
 ]
 
 biomes = {
-    "plains": {
+    "PLAINS    ": {
         "text": "PLAINS",
         "enemies": True
     },
-    "forest": {
+    "FOREST    ": {
         "text": "FOREST",
         "enemies": True
     },
-    "fields": {
+    "FIELDS    ": {
         "text": "FIELDS",
         "enemies": False
     },
-    "bridge": {
+    "BRIDGE    ": {
         "text": "BRIDGE",
         "enemies": True
     },
-    "town": {
+    "TOWN      ": {
         "text": "TOWN",
         "enemies": False
     },
-    "item_shop": {
+    "ITEM_SHOP ": {
         "text": "ITEM SHOP",
         "enemies": False
     },
-    "magic_shop": {
+    "MAGIC_SHOP": {
         "text": "MAGIC SHOP",
         "enemies": False
     },
-    "mayor": {
+    "MAYOR     ": {
         "text": "MAYOR",
         "enemies": False
     },
-    "cave": {
+    "CAVE      ": {
         "text": "CAVE",
         "enemies": False
     },
-    "mountain": {
+    "MOUNTAIN  ": {
         "text": "MOUNTAIN",
         "enemies": True
     },
-    "hills": {
+    "HILLS     ": {
         "text": "HILLS",
         "enemies": True
     },

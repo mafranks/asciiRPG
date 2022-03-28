@@ -165,6 +165,18 @@ def load():
     # TODO - Add print for each save file and option to choose which one to load
 
 
+def display_map(map):
+    """Displays the explored section of the current map"""
+    for row in range(len(map)):
+        print(f"\n{line}")
+        for tile in map[row]:
+            if tile['visible'] is True:
+                print(f"{tile['type']}, ",  end='')
+            else:
+                print('XXXXXXXXXX, ', end='')
+    print(f"\n{line}")
+
+
 def battle(current_enemy, player_data):
     """Kicks of a battle sequence between the player and a randomly chosen enemy"""
     global fight, play, run, line
@@ -288,11 +300,13 @@ while run:
 
     while play:
         clear()
-        current_tile = current_map[player.x][player.y]
+        current_tile = current_map[player.x][player.y]['type']
+        current_map[player.x][player.y]['visible'] = True
         if not standing and biomes[current_tile]['enemies'] and random.randint(0, 100) < 25:
             fight = True
             enemy = enemy_list[random.randrange(0, len(enemy_list))]
             player = battle(enemy, player)
+        display_map(current_map)
         print(f"LOCATION: {biomes[current_tile]['text']} {player.x, player.y}")
         print(f"Move with W,S,A,D")
         print(f"0 to view menu")
