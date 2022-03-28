@@ -310,7 +310,7 @@ while run:
         print(f"LOCATION: {biomes[current_tile]['text']} {player.x, player.y}")
         print(f"Move with W,S,A,D")
         print(f"0 to view menu")
-        # TODO - Add visible map on the screen showing uncovered areas
+        # TODO - Make player position more obvious in the map
         destination = input("> ")
         match destination.split():
             case ["0"]:

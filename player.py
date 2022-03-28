@@ -114,6 +114,7 @@ def use_inventory(player):
     print(line)
     print(f"{player.name}'s HP: {player.HP}/{player.MAXHP}")
     print(f"{player.name}'s MP: {player.MP}/{player.MAXMP}")
+    input("> ")
     return player, True
 
 
@@ -151,11 +152,10 @@ def use_magic(player, fight=False, enemy=None):
             if enemy.hp < 0:
                 enemy.hp = 0
             print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
-            input("> ")
         case ["0"]:
             return player, enemy, False
         case _:
             print(error_msg)
             use_magic(player, fight, enemy)
-
+    input("> ")
     return player, enemy, True
