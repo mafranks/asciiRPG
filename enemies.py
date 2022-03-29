@@ -5,7 +5,7 @@ enemy_list = ["Goblin", "Orc", "Slime"]
 
 class Enemy:
     """Object containing all of the enemy data"""
-
+    # TODO - Add enemy weaknesses and strengths (vs attack, magic types)
     def __init__(self, enemy):
         self.name = enemy_stats[enemy]['Name']
         self.hp = enemy_stats[enemy]['HP'],

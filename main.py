@@ -2,14 +2,17 @@
 import os
 import random
 import time
+
+from enemies import enemy_list, Enemy
+from maps import map1, biomes
+from player import Player, use_inventory, print_player_info, use_magic
+from shops import item_shop, magic_shop
+from utilities import clear, error_msg
+
 try:
     import cPickle as pickle
 except ModuleNotFoundError:
     import pickle
-from player import Player, use_inventory, print_player_info, use_magic
-from maps import map1, biomes
-from enemies import enemy_list, Enemy
-from utilities import clear, error_msg
 
 
 run = True
@@ -45,16 +48,16 @@ def print_rules():
     print(line)
     print("Move around the map with W (up), S (down), A (left) and d (right) keys.")
     print("Randomly encounter enemies depending on the terrain you are traversing.")
-    print("Restore HP with potions and MP with elixirs.")
-    print("Increase your abilities by leveling up (gaining XP) and by leveling up weapons and spells in the shop.")
+    print("Restore HP with potions and MP with ethers.")
+    print("Buy items in the Item Shop and spells in the Magic Shop.")
     print("Gain strength to find the key to unlock the castle.  Defeat the dragon to save the Royal Family and win!")
     print("Inventory:")
     print("Potion - Heals 10 HP")
     print("Mid-Potion - Heals 25 HP")
     print("High-Potion - Heals 50 HP")
-    print("Elixir - Heals 2 MP")
-    print("Mid-Elixir - Heals 5 MP")
-    print("High-Elixir - Heals 10 MP")
+    print("Ether - Heals 2 MP")
+    print("Mid-Ether - Heals 5 MP")
+    print("High-Ether - Heals 10 MP")
     input("> ")
 
 
@@ -104,6 +107,18 @@ def main_menu(player_data):
             player_data, _ = use_inventory(player_data)
             clear()
         case ["3"]:
+            print(f"{player.name} knows these battle spells: ")
+            for spell in player.magic:
+                if not spell.startswith('heal'):
+                    print(spell)
+            heals = [spell for spell in player.magic if spell.startswith('heal')]
+            if len(heals) == 0:
+                print(f"{player.name} doesn't know any healing spells. Visit the Magic Shop.")
+            else:
+                print(f"{player.name} knows these healing spells: ")
+                for spell in player.magic:
+                    if spell.startswith('heal'):
+                        print(spell)
             player_data, _, _ = use_magic(player_data)
             clear()
         case ["4"]:
@@ -119,7 +134,7 @@ def main_menu(player_data):
                 case ['N'] | ['n']:
                     main_menu(player_data)
                 case _:
-                    print(error_msg)
+                    input(error_msg)
         case ["6"] | ['New'] | ['New', 'Game']:
             print("Are you sure you want to start a new game?  This will overwrite your existing game! (Y/N)")
             choice2 = input("> ")
@@ -130,8 +145,7 @@ def main_menu(player_data):
                 case ['N'] | ['n']:
                     main_menu(player_data)
                 case _:
-                    print(error_msg)
-                    input("> ")
+                    input(error_msg)
         case ["7"] | ['Rules']:
             print_rules()
         case ["8"] | ['Quit'] | ['Quit', 'Game'] | ['q'] | ['Q']:
@@ -139,7 +153,8 @@ def main_menu(player_data):
             play = False
             run = False
         case _:
-            print(error_msg)
+            input(error_msg)
+            clear()
             main_menu(player_data)
 
     return player_data
@@ -171,7 +186,7 @@ def display_map(map):
         print(f"\n{line}")
         for tile in map[row]:
             if tile['visible'] is True:
-                print(f"{tile['type']}, ",  end='')
+                print(f"{biomes[tile['type']]['display']}, ",  end='')
             else:
                 print('XXXXXXXXXX, ', end='')
     print(f"\n{line}")
@@ -217,7 +232,7 @@ def battle(current_enemy, player_data):
                     if action_taken is True:
                         break
                 case _:
-                    print(error_msg)
+                    input(error_msg)
 
         if enemy.hp > 0:
             print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
@@ -289,7 +304,7 @@ while run:
                 play = False
                 run = False
             case _:
-                print(error_msg)
+                input(error_msg)
 
     while setup:
         clear()
@@ -306,10 +321,15 @@ while run:
             fight = True
             enemy = enemy_list[random.randrange(0, len(enemy_list))]
             player = battle(enemy, player)
+
         display_map(current_map)
         print(f"LOCATION: {biomes[current_tile]['text']} {player.x, player.y}")
         print(f"Move with W,S,A,D")
         print(f"0 to view menu")
+        if current_tile == 'item_shop':
+            print(f"1 to visit the Item Shop")
+        elif current_tile == 'magic_shop':
+            print(f"2 to visit the Magic Shop")
         # TODO - Make player position more obvious in the map
         destination = input("> ")
         match destination.split():
@@ -339,8 +359,12 @@ while run:
                     player.y += 1
                 else:
                     player.y = 0
+            case ['1']:
+                player = item_shop(player)
+            case ['2']:
+                player = magic_shop(player)
             case _:
-                print(error_msg)
+                input(error_msg)
 
 print("Exiting")
 time.sleep(5)
