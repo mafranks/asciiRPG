@@ -6,3 +6,7 @@ You move around the game with W,S,A,D and try to level up high enough to get the
 There is an item shop available to purchase items and a magic shop to purchase spells.  
 
 This is still very much a work in progress. I'm working on it as I have free time and hope to get it finished within a month or two.  Please let me know if you find any bugs!
+
+To run the game, use the main.py file.
+
+`python3 main.py`
