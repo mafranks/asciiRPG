@@ -10,3 +10,5 @@ This is still very much a work in progress. I'm working on it as I have free tim
 To run the game, use the main.py file.
 
 `python3 main.py`
+
+NOTE: Python 3.10 is required for this game.  Wanted to try out the new Structural Pattern Matching.
