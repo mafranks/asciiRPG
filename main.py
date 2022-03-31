@@ -4,9 +4,9 @@ import random
 import time
 
 from enemies import enemy_list, Enemy
-from maps import map1, biomes
+from maps import starting_map, biomes, town_map
 from player import Player, use_inventory, print_player_info, use_magic
-from shops import item_shop, magic_shop
+from shops import item_shop, magic_shop, inn
 from utilities import clear, error_msg
 
 try:
@@ -27,10 +27,14 @@ standing = True  # Avoids fight change immediately upon start of game
 # TODO - Add variable save name so multiple saves can exist
 save_file = "save_file.pkl"
 line = "--------------------"
-current_map = map1
-x_max = len(current_map) - 1
-y_max = len(current_map[0]) - 1
 
+
+def set_map(target_map):
+    # Set the current map to use and provide map boundaries
+    current_map = target_map
+    x_max = len(current_map) - 1
+    y_max = len(current_map[0]) - 1
+    return current_map, x_max, y_max
 
 def print_start_menu():
     """ Print main text menu prior to the game starting"""
@@ -162,6 +166,10 @@ def main_menu(player_data):
 
 def save(player_data):
     """Save the game to a local file"""
+    # TODO - Save map data with the player
+    # Set player to start of the map for consistency
+    player.x = 0
+    player.y = 0
     with open(save_file, "wb") as file:
         pickle.dump(player_data, file, pickle.HIGHEST_PROTOCOL)
     print("Player data saved")
@@ -180,16 +188,16 @@ def load():
     # TODO - Add print for each save file and option to choose which one to load
 
 
-def display_map(map):
+def display_map(current_map):
     """Displays the explored section of the current map"""
-    for row in range(len(map)):
-        print(f"\n{line}")
-        for tile in map[row]:
+    for row in range(len(current_map)):
+        print(f"\n{line * (x_max - 1)}----------------")
+        for tile in current_map[row]:
             if tile['visible'] is True:
-                print(f"{biomes[tile['type']]['display']}, ",  end='')
+                print(f"{biomes[tile['type']]['display']} ",  end='')
             else:
-                print('XXXXXXXXXX, ', end='')
-    print(f"\n{line}")
+                print('XXXXXXXXX| ', end='')
+    print(f"\n{line * (x_max - 1)}----------------")
 
 
 def battle(current_enemy, player_data):
@@ -294,6 +302,7 @@ while run:
                 intro = False
             case ["2"] | ['Load'] | ['Load', 'Game']:
                 player = load()
+                current_map, x_max, y_max = set_map(starting_map)
                 intro = False
                 setup = False
                 play = True
@@ -309,6 +318,7 @@ while run:
     while setup:
         clear()
         player = create_new_player()
+        current_map, x_max, y_max = set_map(starting_map)
         input("> ")
         play = True
         setup = False
@@ -317,10 +327,11 @@ while run:
         clear()
         current_tile = current_map[player.x][player.y]['type']
         current_map[player.x][player.y]['visible'] = True
-        if not standing and biomes[current_tile]['enemies'] and random.randint(0, 100) < 25:
-            fight = True
-            enemy = enemy_list[random.randrange(0, len(enemy_list))]
-            player = battle(enemy, player)
+        # TODO - Re-enable battling when done testing
+        # if not standing and biomes[current_tile]['enemies'] and random.randint(0, 100) < 25:
+        #     fight = True
+        #     enemy = enemy_list[random.randrange(0, len(enemy_list))]
+        #     player = battle(enemy, player)
 
         display_map(current_map)
         print(f"LOCATION: {biomes[current_tile]['text']} {player.x, player.y}")
@@ -330,6 +341,12 @@ while run:
             print(f"1 to visit the Item Shop")
         elif current_tile == 'magic_shop':
             print(f"2 to visit the Magic Shop")
+        elif current_tile == 'town':
+            print(f"3 to visit the Town")
+        elif current_tile == 'inn':
+            print(f"4 to visit the Inn")
+        elif current_tile == 'entrance':
+            print(f"9 to return to map")
         # TODO - Make player position more obvious in the map
         destination = input("> ")
         match destination.split():
@@ -363,6 +380,16 @@ while run:
                 player = item_shop(player)
             case ['2']:
                 player = magic_shop(player)
+            case ['3']:
+                current_map, x_max, y_max = set_map(town_map)
+                player.x = 0
+                player.y = 0
+            case ['4']:
+                player = inn(player)
+            case ['9']:
+                current_map, x_max, y_max = set_map(starting_map)
+                player.x = 3
+                player.y = 2
             case _:
                 input(error_msg)
 

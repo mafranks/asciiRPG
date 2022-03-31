@@ -213,3 +213,26 @@ def magic_shop(player):
             input(error_msg)
 
     return player
+
+
+def inn(player):
+    """Print menu for inn"""
+    print(line)
+    print("INN:")
+    choice = input("Would you like to stay at the inn for 15 Gold? y/n")
+    match  choice.split():
+        case ['y'] | ['Y'] | ['Yes'] | ['yes']:
+            if player.gold >= 15:
+                player.HP = player.MAXHP
+                player.MP = player.MAXMP
+                player.gold -= 15
+                print("HP and MP restored")
+                print(f"{player.name}'s HP: {player.HP}/{player.MAXHP}")
+                print(f"{player.name}'s MP: {player.MP}/{player.MAXMP}")
+                input("> ")
+            else:
+                print("Not enough Gold to stay at the Inn.")
+        case ['n'] | ['N'] | ['No'] | ['no']:
+            print("Please come again!")
+
+    return player

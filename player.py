@@ -8,7 +8,7 @@ class Player:
 
     def __init__(self):
         self.name = ''
-        self.HP = 50
+        self.HP = 30
         self.MAXHP = 50
         self.MP = 10
         self.MAXMP = 10
