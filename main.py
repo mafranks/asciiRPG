@@ -3,9 +3,9 @@ import os
 import random
 import time
 
-from enemies import enemy_list, Enemy
+from enemies import Enemy, enemy_list
 from maps import starting_map, biomes, town_map
-from player import Player, use_inventory, print_player_info, use_magic
+from player import Player, use_inventory, print_player_info, use_magic, level_up_check
 from shops import item_shop, magic_shop, inn
 from utilities import clear, error_msg
 
@@ -263,8 +263,13 @@ def battle(current_enemy, player_data):
             print(f"You defeated the {enemy.name}!")
             fight = False
             print(line)
+            # Award random amount of Gold between allowable values in the enemy's stats
             print(f"You've found {enemy.gold} gold!")
             player_data.gold += enemy.gold
+            # Award random XP between allowable values in the enemy's stats
+            print(f"You've gained {enemy.xp} XP!")
+            player_data.XP += enemy.xp
+            player_data = level_up_check(player_data)
             chance = random.randint(0, 100)
             if chance >= 98:
                 print(f"You've found a high potion!")
@@ -327,11 +332,10 @@ while run:
         clear()
         current_tile = current_map[player.x][player.y]['type']
         current_map[player.x][player.y]['visible'] = True
-        # TODO - Re-enable battling when done testing
-        # if not standing and biomes[current_tile]['enemies'] and random.randint(0, 100) < 25:
-        #     fight = True
-        #     enemy = enemy_list[random.randrange(0, len(enemy_list))]
-        #     player = battle(enemy, player)
+        if not standing and biomes[current_tile]['enemies'] and random.randint(0, 100) < 25:
+            fight = True
+            enemy = enemy_list[random.randrange(0, len(enemy_list))]
+            player = battle(enemy, player)
 
         display_map(current_map)
         print(f"LOCATION: {biomes[current_tile]['text']} {player.x, player.y}")

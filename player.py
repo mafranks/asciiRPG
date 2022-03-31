@@ -3,6 +3,35 @@ import random
 from utilities import clear, error_msg
 
 
+levels = {
+    1: {"xp_required": 0, "atk_up": random.randint(1, 5), "hp_up": random.randint(1, 5), "mp_up": random.randint(1, 5)},
+    2: {"xp_required": 50, "atk_up": random.randint(1, 5), "hp_up": random.randint(1, 5), "mp_up": random.randint(1, 5)},
+    3: {"xp_required": 120, "atk_up": random.randint(1, 5), "hp_up": random.randint(1, 5), "mp_up": random.randint(1, 5)},
+    4: {"xp_required": 200, "atk_up": random.randint(1, 5), "hp_up": random.randint(1, 5), "mp_up": random.randint(1, 5)},
+    5: {"xp_required": 310, "atk_up": random.randint(1, 5), "hp_up": random.randint(1, 5), "mp_up": random.randint(1, 5)},
+    6: {"xp_required": 500, "atk_up": random.randint(1, 5), "hp_up": random.randint(1, 5), "mp_up": random.randint(1, 5)},
+    7: {"xp_required": 750, "atk_up": random.randint(1, 5), "hp_up": random.randint(1, 5), "mp_up": random.randint(1, 5)},
+    8: {"xp_required": 1150, "atk_up": random.randint(1, 5), "hp_up": random.randint(1, 5), "mp_up": random.randint(1, 5)},
+    9: {"xp_required": 1500, "atk_up": random.randint(1, 5), "hp_up": random.randint(1, 5), "mp_up": random.randint(1, 5)},
+    10: {"xp_required": 20000, "atk_up": random.randint(10, 50), "hp_up": random.randint(10, 50), "mp_up": random.randint(10, 50)}
+}
+
+
+def level_up_check(player):
+    """Check to see if the player has leveled up"""
+    if player.XP > levels[player.level + 1]['xp_required']:
+        print(f"Congratulations!  You've leveled up!")
+        player.level += 1
+        print(f"{player.name} is now Level {player.level}")
+        player.attack += levels[player.level]['atk_up']
+        print(f"Attack increased by {levels[player.level]['atk_up']}")
+        player.MAXHP += levels[player.level]['hp_up']
+        print(f"Max HP increased by {levels[player.level]['hp_up']}")
+        player.MAXMP += levels[player.level]['mp_up']
+        print(f"Max MP increased by {levels[player.level]['atk_up']}")
+    return player
+
+
 class Player:
     """Player object containing all the player related stats"""
 
@@ -13,7 +42,6 @@ class Player:
         self.MP = 10
         self.MAXMP = 10
         self.attack = 10
-        # TODO - Add more spells for purchase in the magic shop
         self.magic = random.sample(["fire", "ice", "lightning", "heal"], 2)
         self.gold = 500
         self.potions = 1
@@ -24,6 +52,8 @@ class Player:
         self.high_ethers = 1
         self.x = 0
         self.y = 0
+        self.XP = 0
+        self.level = 1
         # TODO - Add XP mechanic to level up
 
 
@@ -31,6 +61,7 @@ def print_player_info(player):
     """Print player information
     :param player Player object for the current game"""
     print(f"Name: {player.name}")
+    print(f"Level: {player.level}")
     print(f"HP: {player.HP}/{player.MAXHP}")
     print(f"MP: {player.MP}/{player.MAXMP}")
     print(f"Gold: {player.gold}")
