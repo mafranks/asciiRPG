@@ -169,7 +169,6 @@ def use_magic(player, fight=False, enemy=None):
     :param player Player object for the current game
     :param fight Boolean which indicates if a battle is taking place
     :param enemy Current enemy for ongoing battle"""
-    # TODO - Make spell heal/damage variable within a range
     print(line)
     if 'fire' in player.magic and fight is True:
         print("1 - Fire: Cost 2MP")

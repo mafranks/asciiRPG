@@ -120,7 +120,6 @@ def magic_buy_error(player, spell, cost):
 
 
 def magic_shop(player):
-    # TODO - Fix so you can only buy a spell once
     """Buy magic spells"""
     player = magic_menu(player)
     print(f"You have {player.gold} Gold available.")

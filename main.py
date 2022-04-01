@@ -24,17 +24,17 @@ player = None  # Initializes the player object
 fight = False  # Indicates a battle sequence is underway
 standing = True  # Avoids fight change immediately upon start of game
 
-# TODO - Add variable save name so multiple saves can exist
 save_file = "save_file.pkl"
 line = "--------------------"
 
 
 def set_map(target_map):
-    # Set the current map to use and provide map boundaries
+    """Set the current map to use and provide map boundaries"""
     current_map = target_map
     x_max = len(current_map) - 1
     y_max = len(current_map[0]) - 1
     return current_map, x_max, y_max
+
 
 def print_start_menu():
     """ Print main text menu prior to the game starting"""
@@ -82,8 +82,6 @@ def create_new_player():
             player.name = name
     name_player()
     print(f"Welcome to the game, {player.name}!")
-    # TODO - Add choice for player type
-    # TODO - Add different player attributes to choose from
     return player
 
 
@@ -166,14 +164,12 @@ def main_menu(player_data):
 
 def save(player_data):
     """Save the game to a local file"""
-    # TODO - Save map data with the player
     # Set player to start of the map for consistency
     player.x = 0
     player.y = 0
     with open(save_file, "wb") as file:
         pickle.dump(player_data, file, pickle.HIGHEST_PROTOCOL)
     print("Player data saved")
-    # TODO - Add unique save names so multiple saves are available
 
 
 def load():
@@ -185,7 +181,6 @@ def load():
             return player_data
     else:
         print("No save file found.")
-    # TODO - Add print for each save file and option to choose which one to load
 
 
 def display_map(current_map):
@@ -204,7 +199,6 @@ def battle(current_enemy, player_data):
     """Kicks of a battle sequence between the player and a randomly chosen enemy"""
     global fight, play, run, line
     enemy = Enemy(current_enemy)
-    # TODO - Figure out why hp and maxhp convert to tuples ?!?!
     enemy.hp = enemy.hp[0]
     enemy.maxhp = enemy.maxhp[0]
     enemy.attack = enemy.attack[0]
@@ -225,7 +219,6 @@ def battle(current_enemy, player_data):
             action = input("> ")
             match action.split():
                 case ["1"] | ["Attack"]:
-                    # TODO - Make attack a range based on attack strength
                     enemy.hp -= player_data.attack
                     print(f"{player_data.name} dealt {player_data.attack} damage to the {enemy.name}")
                     break
@@ -351,7 +344,6 @@ while run:
             print(f"4 to visit the Inn")
         elif current_tile == 'entrance':
             print(f"9 to return to map")
-        # TODO - Make player position more obvious in the map
         destination = input("> ")
         match destination.split():
             case ["0"]:

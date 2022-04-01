@@ -6,6 +6,7 @@ error_msg = "Input not understood"
 
 line = "--------------------"
 
+
 def clear():
     """Clear the screen to keep things looking nice"""
     if os.name == 'posix':
