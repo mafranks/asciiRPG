@@ -1,4 +1,4 @@
-"""Shop functions for magice and items"""
+"""Shop functions for magic and items"""
 from utilities import line, clear, error_msg
 
 
@@ -120,6 +120,7 @@ def magic_buy_error(player, spell, cost):
 
 
 def magic_shop(player):
+    # TODO - Fix so you can only buy a spell once
     """Buy magic spells"""
     player = magic_menu(player)
     print(f"You have {player.gold} Gold available.")

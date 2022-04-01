@@ -54,7 +54,6 @@ class Player:
         self.y = 0
         self.XP = 0
         self.level = 1
-        # TODO - Add XP mechanic to level up
 
 
 def print_player_info(player):
