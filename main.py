@@ -398,5 +398,4 @@ while run:
             case _:
                 input(error_msg)
 
-print("Exiting")
-time.sleep(5)
+print("Thanks for playing!")

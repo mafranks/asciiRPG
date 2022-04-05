@@ -183,11 +183,11 @@ def use_magic(player, fight=False, enemy=None):
     if 'ice2' in player.magic and fight is True:
         print("6 - Ice2: Cost 5MP")
     if 'heal' in player.magic:
-        print("7 - Heal: Cost 3MP, Heals 20HP")
+        print("7 - Heal: Cost 3MP, Heals some HP")
     if 'heal2' in player.magic:
-        print("8 - Heal: Cost 6MP, Heals 50HP")
+        print("8 - Heal: Cost 6MP, Heals more HP")
     if 'heal3' in player.magic:
-        print("9 - Heal: Cost 10MP, Fully Heals Player")
+        print("9 - Heal: Cost 10MP, Heals all HP")
     print("0 - Go back")
     choice = input("> ")
     match choice.split():
@@ -195,12 +195,13 @@ def use_magic(player, fight=False, enemy=None):
             if player.MP >= 2 and fight is True and 'fire' in player.magic:
                 print("Using fire.....")
                 player.MP -= 2
-                enemy.hp -= 20
+                hit = random.randint(10, 25)
+                enemy.hp -= hit
             else:
                 magic_error('fire', player, enemy)
                 return player, enemy, False
             print(line)
-            print(f"{enemy.name} took 20 damage.")
+            print(f"{enemy.name} took {hit} damage.")
             if enemy.hp < 0:
                 enemy.hp = 0
             print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
@@ -208,12 +209,13 @@ def use_magic(player, fight=False, enemy=None):
             if player.MP >= 2 and fight is True and 'lightning' in player.magic:
                 print("Using lighting.....")
                 player.MP -= 2
-                enemy.hp -= 20
+                hit = random.randint(10, 25)
+                enemy.hp -= hit
             else:
                 magic_error('lightning', player, enemy)
                 return player, enemy, False
             print(line)
-            print(f"{enemy.name} took 20 damage.")
+            print(f"{enemy.name} took {hit} damage.")
             if enemy.hp < 0:
                 enemy.hp = 0
             print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
@@ -221,12 +223,13 @@ def use_magic(player, fight=False, enemy=None):
             if player.MP >= 2 and fight is True and 'ice' in player.magic:
                 print("Using ice.....")
                 player.MP -= 2
-                enemy.hp -= 20
+                hit = random.randint(10, 25)
+                enemy.hp -= hit
             else:
                 magic_error('ice', player, enemy)
                 return player, enemy, False
             print(line)
-            print(f"{enemy.name} took 20 damage.")
+            print(f"{enemy.name} took {hit} damage.")
             if enemy.hp < 0:
                 enemy.hp = 0
             print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
@@ -234,12 +237,13 @@ def use_magic(player, fight=False, enemy=None):
             if player.MP >= 5 and fight is True and 'fire2' in player.magic:
                 print("Using Fire 2.....")
                 player.MP -= 5
-                enemy.hp -= 50
+                hit = random.randint(30, 55)
+                enemy.hp -= hit
             else:
                 magic_error('fire2', player, enemy)
                 return player, enemy, False
             print(line)
-            print(f"{enemy.name} took 50 damage.")
+            print(f"{enemy.name} took {hit} damage.")
             if enemy.hp < 0:
                 enemy.hp = 0
             print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
@@ -247,12 +251,13 @@ def use_magic(player, fight=False, enemy=None):
             if player.MP >= 5 and fight is True and 'lightning2' in player.magic:
                 print("Using Lightning 2.....")
                 player.MP -= 5
-                enemy.hp -= 50
+                hit = random.randint(30, 55)
+                enemy.hp -= hit
             else:
                 magic_error('lightning2', player, enemy)
                 return player, enemy, False
             print(line)
-            print(f"{enemy.name} took 50 damage.")
+            print(f"{enemy.name} took {hit} damage.")
             if enemy.hp < 0:
                 enemy.hp = 0
             print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
@@ -260,12 +265,13 @@ def use_magic(player, fight=False, enemy=None):
             if player.MP >= 5 and fight is True and 'ice2' in player.magic:
                 print("Using Ice 2.....")
                 player.MP -= 5
-                enemy.hp -= 50
+                hit = random.randint(30, 55)
+                enemy.hp -= hit
             else:
                 magic_error('ice2', player, enemy)
                 return player, enemy, False
             print(line)
-            print(f"{enemy.name} took 50 damage.")
+            print(f"{enemy.name} took {hit} damage.")
             if enemy.hp < 0:
                 enemy.hp = 0
             print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
@@ -273,34 +279,40 @@ def use_magic(player, fight=False, enemy=None):
             if player.MP >= 3 and 'heal' in player.magic:
                 print("Using Heal.....")
                 player.MP -= 3
-                player.HP += 20
+                heal = random.randint(15, 25)
+                player.HP += heal
+                print(line)
+                print(f"{player.name} was healed {heal} HP.")
                 if player.HP > player.MAXHP:
                     player.HP = player.MAXHP
-                else:
-                    magic_error('heal', player, enemy)
-                    return player, enemy, False
-            print(line)
+            else:
+                magic_error('heal', player, enemy)
+                return player, enemy, False
         case ["8"]:
             if player.MP >= 6 and 'heal2' in player.magic:
                 print("Using Heal 2.....")
                 player.MP -= 6
-                player.HP += 50
+                heal = random.randint(35, 65)
+                player.HP += heal
                 if player.HP > player.MAXHP:
                     player.HP = player.MAXHP
-                else:
-                    magic_error('heal2', player, enemy)
-                    return player, enemy, False
-            print(line)
+                print(line)
+                print(f"{player.name} was healed {heal} HP.")
+            else:
+                magic_error('heal2', player, enemy)
+                return player, enemy, False
+
         case ["9"]:
             if player.MP >= 10 and 'heal3' in player.magic:
                 print("Using Heal 3.....")
                 player.MP -= 10
+                heal = player.MAXHP - player.HP
                 player.HP = player.MAXHP
+                print(line)
+                print(f"{player.name} was healed {heal} HP.")
             else:
                 magic_error('heal3', player, enemy)
                 return player, enemy, False
-            print(line)
-
         case ["0"]:
             return player, enemy, False
         case _:
