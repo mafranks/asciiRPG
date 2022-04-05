@@ -135,7 +135,7 @@ def magic_shop(player):
             input("> ")
             clear()
         case ["2"]:
-            if player.gold >= 100:
+            if player.gold >= 100 and 'fire2' not in player.magic:
                 print("Purchasing Fire 2 for 100 Gold.")
                 player.magic.append("fire2")
                 player.gold -= 100
@@ -144,7 +144,7 @@ def magic_shop(player):
             input("> ")
             clear()
         case ["3"]:
-            if player.gold >= 50:
+            if player.gold >= 50 and 'ice' not in player.magic:
                 print("Purchasing Ice for 50 Gold.")
                 player.magic.append("ice")
                 player.gold -= 50
@@ -153,7 +153,7 @@ def magic_shop(player):
             input("> ")
             clear()
         case ["4"]:
-            if player.gold >= 100:
+            if player.gold >= 100 and 'ice2' not in player.magic:
                 print("Purchasing Ice 2 for 100 Gold.")
                 player.magic.append("ice2")
                 player.gold -= 100
@@ -162,7 +162,7 @@ def magic_shop(player):
             input("> ")
             clear()
         case ["5"]:
-            if player.gold >= 50:
+            if player.gold >= 50 and 'lightning' not in player.magic:
                 print("Purchasing Lightning for 50 Gold.")
                 player.magic.append("lightning")
                 player.gold -= 50
@@ -171,7 +171,7 @@ def magic_shop(player):
             input("> ")
             clear()
         case ["6"]:
-            if player.gold >= 100:
+            if player.gold >= 100 and 'lightning2' not in player.magic:
                 print("Purchasing Lightning 2 for 100 Gold.")
                 player.magic.append("lightning2")
                 player.gold -= 100
@@ -180,7 +180,7 @@ def magic_shop(player):
             input("> ")
             clear()
         case ["7"]:
-            if player.gold >= 50:
+            if player.gold >= 50 and 'heal' not in player.magic:
                 print("Purchasing Heal for 50 Gold.")
                 player.magic.append("heal")
                 player.gold -= 50
@@ -189,7 +189,7 @@ def magic_shop(player):
             input("> ")
             clear()
         case ["8"]:
-            if player.gold >= 100:
+            if player.gold >= 100 and 'heal2' not in player.magic:
                 print("Purchasing Heal 2 for 100 Gold.")
                 player.magic.append("heal2")
                 player.gold -= 100
@@ -198,7 +198,7 @@ def magic_shop(player):
             input("> ")
             clear()
         case ["9"]:
-            if player.gold >= 250:
+            if player.gold >= 250 and 'heal3' not in player.magic:
                 print("Purchasing Heal 3 for 50 Gold.")
                 player.magic.append("heal3")
                 player.gold -= 250

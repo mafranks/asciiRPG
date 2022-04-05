@@ -4,7 +4,7 @@ import os
 
 error_msg = "Input not understood"
 
-line = "--------------------"
+line = "-----------"
 
 
 def clear():

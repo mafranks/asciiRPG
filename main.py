@@ -1,4 +1,5 @@
 """Main file for the ASCII RPG"""
+import colorama
 import os
 import random
 import time
@@ -25,8 +26,9 @@ fight = False  # Indicates a battle sequence is underway
 standing = True  # Avoids fight change immediately upon start of game
 
 save_file = "save_file.pkl"
-line = "--------------------"
-
+line = "-----------"
+# colorama allows you to color text in the console
+colorama.init()
 
 def set_map(target_map):
     """Set the current map to use and provide map boundaries"""
@@ -183,16 +185,24 @@ def load():
         print("No save file found.")
 
 
-def display_map(current_map):
+def display_map(current_map, player):
     """Displays the explored section of the current map"""
+    # Counts are needed to see if player is on that tile
+    row_count = 0
     for row in range(len(current_map)):
-        print(f"\n{line * (x_max - 1)}----------------")
+        print(f"\n{line * x_max}")
+        tile_count = 0
         for tile in current_map[row]:
             if tile['visible'] is True:
-                print(f"{biomes[tile['type']]['display']} ",  end='')
+                if (row_count, tile_count) == (player.x, player.y):
+                    print(colorama.Fore.GREEN + f"{biomes[tile['type']]['display']} \033[39m",  end='')
+                else:
+                    print(f"{biomes[tile['type']]['display']} ",  end='')
             else:
                 print('XXXXXXXXX| ', end='')
-    print(f"\n{line * (x_max - 1)}----------------")
+            tile_count += 1
+        row_count += 1
+    print(f"\n{line * x_max}")
 
 
 def battle(current_enemy, player_data):
@@ -330,8 +340,7 @@ while run:
             enemy = enemy_list[random.randrange(0, len(enemy_list))]
             player = battle(enemy, player)
 
-        display_map(current_map)
-        print(f"LOCATION: {biomes[current_tile]['text']} {player.x, player.y}")
+        display_map(current_map, player)
         print(f"Move with W,S,A,D")
         print(f"0 to view menu")
         if current_tile == 'item_shop':
