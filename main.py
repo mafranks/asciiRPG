@@ -7,7 +7,7 @@ from enemies import Enemy, enemy_list
 from maps import starting_map, biomes, town_map
 from player import Player, use_inventory, print_player_info, use_magic, level_up_check
 from shops import item_shop, magic_shop, inn
-from utilities import clear, error_msg
+from utilities import clear, error_msg, line, main_map_line, town_line
 
 try:
     import cPickle as pickle
@@ -25,7 +25,6 @@ fight = False  # Indicates a battle sequence is underway
 standing = True  # Avoids fight change immediately upon start of game
 
 save_file = "save_file.pkl"
-line = "-----------"
 # colorama allows you to color text in the console
 colorama.init()
 
@@ -99,17 +98,18 @@ def main_menu(player_data):
     print("6 - New Game")
     print("7 - Rules")
     print("8 - Quit Game")
+    print("0 - Go Back")
     print(f"{player_data.name}'s HP: {player_data.HP}/{player_data.MAXHP}")
     print(f"{player_data.name}'s MP: {player_data.MP}/{player_data.MAXMP}")
     choice = input("< ")
-    match choice.split():
-        case ["1"]:
+    match choice:
+        case "1":
             clear()
             player_data = print_player_info(player_data)
-        case ["2"]:
+        case "2":
             player_data, _ = use_inventory(player_data)
             clear()
-        case ["3"]:
+        case "3":
             print(f"{player.name} knows these battle spells: ")
             for spell in player.magic:
                 if not spell.startswith('heal'):
@@ -124,10 +124,10 @@ def main_menu(player_data):
                         print(spell)
             player_data, _, _ = use_magic(player_data)
             clear()
-        case ["4"]:
+        case "4":
             save(player_data)
             input("> ")
-        case ["5"] | ["Load"] | ["Load", "Game"]:
+        case "5":
             print("Are you sure you want to load a game?  This will overwrite your existing game! (Y/N)")
             choice2 = input("> ")
             match choice2.split():
@@ -138,7 +138,7 @@ def main_menu(player_data):
                     main_menu(player_data)
                 case _:
                     input(error_msg)
-        case ["6"] | ['New'] | ['New', 'Game']:
+        case "6":
             print("Are you sure you want to start a new game?  This will overwrite your existing game! (Y/N)")
             choice2 = input("> ")
             match choice2.split():
@@ -149,9 +149,9 @@ def main_menu(player_data):
                     main_menu(player_data)
                 case _:
                     input(error_msg)
-        case ["7"] | ['Rules']:
+        case "7":
             print_rules()
-        case ["8"] | ['Quit'] | ['Quit', 'Game'] | ['q'] | ['Q']:
+        case "8" | 'q' | 'Q':
             intro = False
             play = False
             run = False
@@ -189,7 +189,10 @@ def display_map(current_map, player):
     # Counts are needed to see if player is on that tile
     row_count = 0
     for row in range(len(current_map)):
-        print(f"\n{line * x_max}")
+        if len(current_map[0]) == 7:
+            print(f"\n{main_map_line}")
+        elif len(current_map[0]) == 2:
+            print(f"\n{town_line}")
         tile_count = 0
         for tile in current_map[row]:
             if tile['visible'] is True:
@@ -201,7 +204,10 @@ def display_map(current_map, player):
                 print('XXXXXXXXX| ', end='')
             tile_count += 1
         row_count += 1
-    print(f"\n{line * x_max}")
+    if len(current_map[0]) == 7:
+        print(f"\n{main_map_line}")
+    elif len(current_map[0]) == 2:
+        print(f"\n{town_line}")
 
 
 def battle(current_enemy, player_data):
@@ -226,17 +232,18 @@ def battle(current_enemy, player_data):
             print(f"3 - Inventory")
             print(line)
             action = input("> ")
-            match action.split():
-                case ["1"] | ["Attack"]:
-                    enemy.hp -= player_data.attack
-                    print(f"{player_data.name} dealt {player_data.attack} damage to the {enemy.name}")
+            match action:
+                case "1":
+                    damage = random.randint(player_data.attack - 5, player_data.attack + 5)
+                    enemy.hp -= damage
+                    print(f"{player_data.name} dealt {damage} damage to the {enemy.name}")
                     break
-                case ["2"] | ["Magic"]:
+                case "2":
                     player, enemy, action_taken = use_magic(player_data, fight, enemy)
                     clear()
                     if action_taken is True:
                         break
-                case ["3"] | ["Inventory"]:
+                case "3":
                     player_data, action_taken = use_inventory(player_data)
                     clear()
                     if action_taken is True:
@@ -303,19 +310,19 @@ while run:
         print_start_menu()
         choice = input("> ")
         clear()
-        match choice.split():
-            case ["1"] | ['New'] | ['New', 'Game']:
+        match choice:
+            case "1":
                 setup = True
                 intro = False
-            case ["2"] | ['Load'] | ['Load', 'Game']:
+            case "2":
                 player = load()
                 current_map, x_max, y_max = set_map(starting_map)
                 intro = False
                 setup = False
                 play = True
-            case ["3"] | ['Rules']:
+            case "3":
                 print_rules()
-            case ["4"] | ['Quit'] | ['Quit', 'Game']:
+            case "4":
                 intro = False
                 play = False
                 run = False

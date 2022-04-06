@@ -4,7 +4,9 @@ import os
 
 error_msg = "Input not understood"
 
-line = "-----------"
+line = "-" * 17
+main_map_line = "-" * 76
+town_line = "-" * 21
 
 
 def clear():
