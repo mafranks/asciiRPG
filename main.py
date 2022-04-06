@@ -353,48 +353,47 @@ while run:
         elif current_tile == 'entrance':
             print(f"9 to return to map")
         destination = input("> ")
-        match destination.split():
-            case ["0"]:
-                player = main_menu(player)
-            case ["W"] | ["w"]:
-                standing = False
-                if player.x > 0:
-                    player.x -= 1
-                else:
-                    player.x = x_max
-            case ["S"] | ["s"]:
-                standing = False
-                if player.x < x_max:
-                    player.x += 1
-                else:
-                    player.x = 0
-            case ["A"] | ["a"]:
-                standing = False
-                if player.y > 0:
-                    player.y -= 1
-                else:
-                    player.y = y_max
-            case ["D"] | ["d"]:
-                standing = False
-                if player.y < y_max:
-                    player.y += 1
-                else:
-                    player.y = 0
-            case ['1']:
-                player = item_shop(player)
-            case ['2']:
-                player = magic_shop(player)
-            case ['3']:
-                current_map, x_max, y_max = set_map(town_map)
+        if destination == "0":
+            player = main_menu(player)
+        elif destination == "w" or destination == "W":
+            standing = False
+            if player.x > 0:
+                player.x -= 1
+            else:
+                player.x = x_max
+        elif destination == "S" or destination == "s":
+            standing = False
+            if player.x < x_max:
+                player.x += 1
+            else:
                 player.x = 0
+        elif destination == "A" or destination == "a":
+            standing = False
+            if player.y > 0:
+                player.y -= 1
+            else:
+                player.y = y_max
+        elif destination == "D" or destination == "d":
+            standing = False
+            if player.y < y_max:
+                player.y += 1
+            else:
                 player.y = 0
-            case ['4']:
+        elif current_tile == 'item_shop' and destination == '1':
+            player = item_shop(player)
+        elif current_tile == 'magic_shop' and destination == '2':
+            player = magic_shop(player)
+        elif current_tile == 'town' and destination == '3':
+            current_map, x_max, y_max = set_map(town_map)
+            player.x = 0
+            player.y = 0
+        elif current_tile == 'inn' and destination == '4':
                 player = inn(player)
-            case ['9']:
-                current_map, x_max, y_max = set_map(starting_map)
-                player.x = 3
-                player.y = 2
-            case _:
-                input(error_msg)
+        elif current_tile == 'entrance' and destination == '9':
+            current_map, x_max, y_max = set_map(starting_map)
+            player.x = 3
+            player.y = 2
+        else:
+            input(error_msg)
 
 print("Thanks for playing!")
