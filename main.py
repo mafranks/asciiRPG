@@ -2,7 +2,6 @@
 import colorama
 import os
 import random
-import time
 
 from enemies import Enemy, enemy_list
 from maps import starting_map, biomes, town_map
