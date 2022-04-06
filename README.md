@@ -7,8 +7,11 @@ There is an item shop available to purchase items and a magic shop to purchase s
 
 This is still very much a work in progress. I'm working on it as I have free time and hope to get it finished within a month or two.  Please let me know if you find any bugs!
 
-To run the game, use the main.py file.
+To run the game, install the requirments and then use the main.py file.
+
+`python3 -m pip install -r requirements.txt`
 
 `python3 main.py`
+
 
 NOTE: Python 3.10 is required for this game.  Wanted to try out the new Structural Pattern Matching.
