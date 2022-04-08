@@ -37,7 +37,7 @@ class Player:
 
     def __init__(self):
         self.name = ''
-        self.HP = 30
+        self.HP = 50
         self.MAXHP = 50
         self.MP = 10
         self.MAXMP = 10
@@ -193,7 +193,15 @@ def use_magic(player, fight=False, enemy=None):
         if player.MP >= 2:
             print("Using fire.....")
             player.MP -= 2
-            hit = random.randint(10, 25)
+            dmg = random.randint(10, 25)
+            if 'fire' in enemy.resistance:
+                print(f"{enemy.name} is resistant to fire")
+                hit = int(dmg * .75)
+            elif 'fire' in enemy.immunity:
+                print(f"{enemy.name} is immune to fire")
+                hit = 0
+            else:
+                hit = dmg
             enemy.hp -= hit
         else:
             magic_error('fire', player, enemy)

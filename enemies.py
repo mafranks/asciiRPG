@@ -1,50 +1,101 @@
 """Contains the various enemies and their statistics"""
 import random
-enemy_list = ["Goblin", "Orc", "Slime"]
 
 
 class Enemy:
     """Object containing all of the enemy data"""
     def __init__(self, enemy):
         self.name = enemy_stats[enemy]['Name']
-        self.hp = enemy_stats[enemy]['HP'],
+        self.hp = enemy_stats[enemy]['MAXHP'],
         self.maxhp = enemy_stats[enemy]['MAXHP'],
         self.attack = enemy_stats[enemy]['Attack'],
         self.gold = random.randint(enemy_stats[enemy]['Gold'][0], enemy_stats[enemy]['Gold'][1])
-        self.xp = random.randint(enemy_stats[enemy]['XP'][0], enemy_stats[enemy]['XP'][1])
+        self.xp = enemy_stats[enemy]['XP']
+        self.resistance = enemy_stats[enemy]['Resistance']
+        self.immunity = enemy_stats[enemy]['Immunity']
 
 
+"""
+Enemy Parameters:
+Name: Name
+MAXHP: Maximum hit points
+Attack: Physical attack power
+Gold: Amount of gold to drop upon defeat
+XP: Amount of xp the player gains upon defeat
+Terrain: Terrain types the enemy will spawn on
+Levels: Player level this enemy will spawn on
+Resistance: Magic types or Physical attack the enemy is resistant to (reduces effect by 25%)
+Immunity: Magic types or Physical attack the enemy is immune to (reduces effect by 100%)
+"""
 enemy_stats = {
-    "Slime": {
-        "Name": "Slime",
-        "HP": 15,
-        "MAXHP": 15,
-        "Attack": 2,
-        "Gold": [5, 12],
-        "XP": [10, 20]
-    },
     "Goblin": {
         "Name": "Goblin",
-        "HP": 25,
-        "MAXHP": 25,
-        "Attack": 5,
+        "MAXHP": 8,
+        "Attack": 4,
+        "Gold": [5, 10],
+        "XP": 6,
+        "Terrain": ['plains', 'fields', 'hills'],
+        "Levels": [1-3],
+        "Resistance": ['fire'],
+        "Immunity": []
+    },
+    "Goblin Guard": {
+        "Name": "Goblin Guard",
+        "MAXHP": 16,
+        "Attack": 8,
+        "Gold": [10, 15],
+        "XP": 18,
+        "Terrain": ['plains', 'fields', 'hills'],
+        "Levels": [1 - 4],
+        "Resistance": ['fire2'],
+        "Immunity": ['fire']
+    },
+    "Cobra": {
+        "Name": "Cobra",
+        "HP": 56,
+        "MAXHP": 15,
+        "Attack": 6,
+        "Gold": [5, 30],
+        "XP": 25,
+        "Terrain": ['plains', 'fields', 'hills'],
+        "Levels": [1-3],
+        "Resistance": ['fire'],
+        "Immunity": []
+    },
+    "Black Widow": {
+        "Name": "Black Widow",
+        "MAXHP": 28,
+        "Attack": 10,
         "Gold": [8, 20],
-        "XP": [25, 40]
+        "XP": 30,
+        "Terrain": ['plains', 'forest', 'fields', 'hills'],
+        "Levels": [1-4],
+        "Resistance": ['fire'],
+        "Immunity": []
     },
-    "Orc": {
-        "Name": "Orc",
-        "HP": 30,
-        "MAXHP": 30,
-        "Attack": 2,
-        "Gold": [12, 35],
-        "XP": [35, 50]
+    "Wolf": {
+        "Name": "Wolf",
+        "MAXHP": 20,
+        "Attack": 8,
+        "Gold": [5, 10],
+        "XP": 24,
+        "Terrain": ['plains', 'forest', 'fields', 'hills'],
+        "Levels": [1 - 4],
+        "Resistance": ['fire'],
+        "Immunity": []
     },
+}
+
+final_enemy = {
     "Dragon": {
         "Name": "Dragon",
-        "HP": 100,
         "MAXHP": 100,
         "Attack": 8,
         "Gold": 100,
-        "XP": [1000, 2000]
+        "XP": [1000, 2000],
+        "Resistance": ["lightning", "lightning2"],
+        "Immunity": ["fire", "fire2"]
     },
 }
+
+enemy_list = [enemy for enemy in enemy_stats]
