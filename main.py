@@ -22,7 +22,7 @@ intro = True  # Plays the introduction for a new game
 setup = True  # True until the setup phase is complete
 player = None  # Initializes the player object
 fight = False  # Indicates a battle sequence is underway
-standing = True  # Avoids fight change immediately upon start of game
+standing = True  # Avoids fight change immediately upon start of game and while using menus
 
 save_file = "save_file.pkl"
 # colorama allows you to color text in the console
@@ -155,6 +155,8 @@ def main_menu(player_data):
             intro = False
             play = False
             run = False
+        case "0":
+            clear()
         case _:
             input(error_msg)
             clear()
@@ -388,8 +390,10 @@ while run:
                 player.y = 0
         elif current_tile == 'item_shop' and destination == '1':
             player = item_shop(player)
+            standing = True
         elif current_tile == 'magic_shop' and destination == '2':
             player = magic_shop(player)
+            standing = True
         elif current_tile == 'town' and destination == '3':
             current_map, x_max, y_max = set_map(town_map)
             player.x = 0
