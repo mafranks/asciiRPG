@@ -99,11 +99,10 @@ def print_items_list(player):
     print(f"High-Ethers: {player.high_ethers}")
 
 
-def magic_error(spell, player, enemy):
+def magic_error(spell, player):
     """Display error if player tries to use a spell they either don't have or don't have enough MP to use
     :param spell Current spell the player is trying to use
-    :param player Player object for the current game
-    :param enemy Current enemy for the ongoing battle"""
+    :param player Player object for the current game"""
     if spell not in player.magic:
         print(f"{player.name} has not learned {spell}. Please visit the Magic Shop.")
     else:
@@ -182,6 +181,47 @@ def use_inventory(player):
     return player, True
 
 
+def process_spell(player, enemy, spell):
+    """Process the damage/heal effect of a spell
+    :param player Player object for the current game
+    :param enemy Enemy object or the current battle
+    :param spell Spell being used"""
+    print(f"Using {spell}.....")
+    player.MP -= spells[spell]['MP_Cost']
+    # If attacking spell
+    if not spell.startswith('heal'):
+        dmg = random.randint(spells[spell]['Damage_Min'], spells[spell]['Damage_Max'])
+        if spell in enemy.resistance:
+            print(f"{enemy.name} is resistant to {spell}.")
+            hit = int(dmg * .75)
+        elif spell in enemy.immunity:
+            print(f"{enemy.name} is immune to {spell}.")
+            hit = 0
+        else:
+            hit = dmg
+        enemy.hp -= hit
+        print(line)
+        print(f"{enemy.name} took {hit} damage.")
+        if enemy.hp < 0:
+            enemy.hp = 0
+        print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
+    # If healing spell
+    else:
+        player.MP -= spells[spell]['MP_Cost']
+        if spell == 'heal3':
+            player.HP = player.MAXHP
+            print(line)
+            print(f"{player.name} was healed {player.MAXHP} HP.")
+        else:
+            heal = random.randint(spells[spell]['Heal_Min'], spells[spell]['Heal_Max'])
+            player.HP += heal
+            print(line)
+            print(f"{player.name} was healed {heal} HP.")
+        if player.HP > player.MAXHP:
+            player.HP = player.MAXHP
+    return player, enemy
+
+
 def use_magic(player, fight=False, enemy=None):
     """Use magic spells
     :param player Player object for the current game
@@ -189,153 +229,78 @@ def use_magic(player, fight=False, enemy=None):
     :param enemy Current enemy for ongoing battle"""
     print(line)
     if 'fire' in player.magic and fight is True:
-        print(f"1 - Fire: Cost {spells['Fire']['MP_Cost']}")
+        print(f"1 - Fire: Cost {spells['fire']['MP_Cost']}")
     if 'lightning' in player.magic and fight is True:
-        print(f"2 - Lightning: Cost {spells['Lightning']['MP_Cost']}")
+        print(f"2 - Lightning: Cost {spells['lightning']['MP_Cost']}")
     if 'ice' in player.magic and fight is True:
-        print(f"3 - Ice: Cost {spells['Ice']['MP_Cost']}")
+        print(f"3 - Ice: Cost {spells['ice']['MP_Cost']}")
     if 'fire2' in player.magic and fight is True:
-        print(f"4 - Fire2: Cost {spells['Fire2']['MP_Cost']}")
+        print(f"4 - Fire2: Cost {spells['fire2']['MP_Cost']}")
     if 'lightning2' in player.magic and fight is True:
-        print(f"5 - Lightning2: Cost {spells['Lightning2']['MP_Cost']}")
+        print(f"5 - Lightning2: Cost {spells['lightning2']['MP_Cost']}")
     if 'ice2' in player.magic and fight is True:
-        print(f"6 - Ice2: Cost {spells['Ice2']['MP_Cost']}")
+        print(f"6 - Ice2: Cost {spells['ice2']['MP_Cost']}")
     if 'heal' in player.magic:
-        print(f"7 - Heal: Cost {spells['Heal']['MP_Cost']}, Heals some HP")
+        print(f"7 - Heal: Cost {spells['heal']['MP_Cost']}, Heals some HP")
     if 'heal2' in player.magic:
-        print(f"8 - Heal: Cost {spells['Heal2']['MP_Cost']}, Heals more HP")
+        print(f"8 - Heal: Cost {spells['heal2']['MP_Cost']}, Heals more HP")
     if 'heal3' in player.magic:
-        print(f"9 - Heal: Cost {spells['Heal3']['MP_Cost']}, Heals all HP")
+        print(f"9 - Heal: Cost {spells['heal3']['MP_Cost']}, Heals all HP")
     print("0 - Go back")
     choice = input("> ")
     if choice == "1" and fight is True and 'fire' in player.magic:
-        if player.MP >= 2:
-            print("Using fire.....")
-            player.MP -= 2
-            dmg = random.randint(10, 25)
-            if 'fire' in enemy.resistance:
-                print(f"{enemy.name} is resistant to fire")
-                hit = int(dmg * .75)
-            elif 'fire' in enemy.immunity:
-                print(f"{enemy.name} is immune to fire")
-                hit = 0
-            else:
-                hit = dmg
-            enemy.hp -= hit
+        if player.MP >= spells['fire']['MP_Cost']:
+            player, enemy = process_spell(player, enemy, 'fire')
         else:
-            magic_error('fire', player, enemy)
+            magic_error('fire', player)
             return player, enemy, False
-        print(line)
-        print(f"{enemy.name} took {hit} damage.")
-        if enemy.hp < 0:
-            enemy.hp = 0
-        print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
     elif choice == "2" and fight is True and 'lightning' in player.magic:
-        if player.MP >= 2:
-            print("Using lighting.....")
-            player.MP -= 2
-            hit = random.randint(10, 25)
-            enemy.hp -= hit
+        if player.MP >= spells['lightning']['MP_Cost']:
+            player, enemy = process_spell(player, enemy, 'lightning')
         else:
-            magic_error('lightning', player, enemy)
+            magic_error('lightning', player)
             return player, enemy, False
-        print(line)
-        print(f"{enemy.name} took {hit} damage.")
-        if enemy.hp < 0:
-            enemy.hp = 0
-        print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
     elif choice == "3" and fight is True and 'ice' in player.magic:
-        if player.MP >= 2:
-            print("Using ice.....")
-            player.MP -= 2
-            hit = random.randint(10, 25)
-            enemy.hp -= hit
+        if player.MP >= spells['ice']['MP_Cost']:
+            player, enemy = process_spell(player, enemy, 'ice')
         else:
-            magic_error('ice', player, enemy)
+            magic_error('ice', player)
             return player, enemy, False
-        print(line)
-        print(f"{enemy.name} took {hit} damage.")
-        if enemy.hp < 0:
-            enemy.hp = 0
-        print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
     elif choice == "4" and fight is True and 'fire2' in player.magic:
-        if player.MP >= 5:
-            print("Using Fire 2.....")
-            player.MP -= 5
-            hit = random.randint(30, 55)
-            enemy.hp -= hit
+        if player.MP >= spells['fire2']['MP_Cost']:
+            player, enemy = process_spell(player, enemy, 'fire2')
         else:
-            magic_error('fire2', player, enemy)
+            magic_error('fire2', player)
             return player, enemy, False
-        print(line)
-        print(f"{enemy.name} took {hit} damage.")
-        if enemy.hp < 0:
-            enemy.hp = 0
-        print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
     elif choice == "5" and fight is True and 'lightning2' in player.magic:
-        if player.MP >= 5:
-            print("Using Lightning 2.....")
-            player.MP -= 5
-            hit = random.randint(30, 55)
-            enemy.hp -= hit
+        if player.MP >= spells['lightning2']['MP_Cost']:
+            player, enemy = process_spell(player, enemy, 'lightning2')
         else:
-            magic_error('lightning2', player, enemy)
+            magic_error('lightning2', player)
             return player, enemy, False
-        print(line)
-        print(f"{enemy.name} took {hit} damage.")
-        if enemy.hp < 0:
-            enemy.hp = 0
-        print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
     elif choice == "6" and fight is True and 'ice2' in player.magic:
-        if player.MP >= 5:
-            print("Using Ice 2.....")
-            player.MP -= 5
-            hit = random.randint(30, 55)
-            enemy.hp -= hit
+        if player.MP >= spells['ice2']['MP_Cost']:
+            player, enemy = process_spell(player, enemy, 'ice2')
         else:
-            magic_error('ice2', player, enemy)
+            magic_error('ice2', player)
             return player, enemy, False
-        print(line)
-        print(f"{enemy.name} took {hit} damage.")
-        if enemy.hp < 0:
-            enemy.hp = 0
-        print(f"Enemy HP: {enemy.hp}/{enemy.maxhp}")
     elif choice == "7" and 'heal' in player.magic:
-        if player.MP >= 3:
-            print("Using Heal.....")
-            player.MP -= 3
-            heal = random.randint(15, 25)
-            player.HP += heal
-            print(line)
-            print(f"{player.name} was healed {heal} HP.")
-            if player.HP > player.MAXHP:
-                player.HP = player.MAXHP
+        if player.MP >= spells['heal']['MP_Cost']:
+            player, enemy = process_spell(player, enemy, 'heal')
         else:
-            magic_error('heal', player, enemy)
+            magic_error('heal', player)
             return player, enemy, False
     elif choice == "8" and 'heal2' in player.magic:
-        if player.MP >= 6:
-            print("Using Heal 2.....")
-            player.MP -= 6
-            heal = random.randint(35, 65)
-            player.HP += heal
-            if player.HP > player.MAXHP:
-                player.HP = player.MAXHP
-            print(line)
-            print(f"{player.name} was healed {heal} HP.")
+        if player.MP >= spells['heal2']['MP_Cost']:
+            player, enemy = process_spell(player, enemy, 'heal2')
         else:
-            magic_error('heal2', player, enemy)
+            magic_error('heal2', player)
             return player, enemy, False
     elif choice == "9" and 'heal3' in player.magic:
-        if player.MP >= 10:
-            print("Using Heal 3.....")
-            player.MP -= 10
-            heal = player.MAXHP
-            player.HP = player.MAXHP
-            print(line)
-            print(f"{player.name} was healed {heal} HP.")
+        if player.MP >= spells['heal3']['MP_Cost']:
+            player, enemy = process_spell(player, enemy, 'heal3')
         else:
-            magic_error('heal3', player, enemy)
+            magic_error('heal3', player)
             return player, enemy, False
     elif choice == "0":
         return player, enemy, False
