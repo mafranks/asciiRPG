@@ -1,6 +1,7 @@
 """Player statistics and informaiton"""
 import random
 from utilities import clear, error_msg
+from spells import spells
 
 
 levels = {
@@ -34,22 +35,40 @@ def level_up_check(player):
 
 class Player:
     """Player object containing all the player related stats"""
+    testing = True
 
     def __init__(self):
         self.name = ''
-        self.HP = 50
-        self.MAXHP = 50
-        self.MP = 10
-        self.MAXMP = 10
-        self.attack = 10
-        self.magic = random.sample(["fire", "ice", "lightning", "heal"], 2)
-        self.gold = 500
-        self.potions = 1
-        self.mid_potions = 1
-        self.high_potions = 1
-        self.ethers = 1
-        self.mid_ethers = 1
-        self.high_ethers = 1
+        # To make testing easier have lots of cheats
+        if self.testing:
+            self.HP = 5000
+            self.MAXHP = 5000
+            self.MP = 1000
+            self.MAXMP = 1000
+            self.magic = ['heal', 'heal2', 'heal3', 'fire', 'fire2', 'ice', 'ice2', 'lightning', 'lightning2']
+            self.gold = 5000
+            self.potions = 100
+            self.mid_potions = 100
+            self.high_potions = 100
+            self.ethers = 100
+            self.mid_ethers = 100
+            self.high_ethers = 100
+            self.attack = 100
+        else:
+            self.HP = 50
+            self.MAXHP = 50
+            self.MP = 10
+            self.MAXMP = 10
+            # Player starts with heal and one other random spell from fire, ice and lightning
+            self.magic = ['heal', random.sample(["fire", "ice", "lightning"], 1)[0]]
+            self.gold = 0
+            self.potions = 1
+            self.mid_potions = 0
+            self.high_potions = 0
+            self.ethers = 1
+            self.mid_ethers = 0
+            self.high_ethers = 0
+            self.attack = 10
         self.x = 0
         self.y = 0
         self.XP = 0
@@ -170,23 +189,23 @@ def use_magic(player, fight=False, enemy=None):
     :param enemy Current enemy for ongoing battle"""
     print(line)
     if 'fire' in player.magic and fight is True:
-        print("1 - Fire: Cost 2MP")
+        print(f"1 - Fire: Cost {spells['Fire']['MP_Cost']}")
     if 'lightning' in player.magic and fight is True:
-        print("2 - Lightning: Cost 2MP")
+        print(f"2 - Lightning: Cost {spells['Lightning']['MP_Cost']}")
     if 'ice' in player.magic and fight is True:
-        print("3 - Ice: Cost 2MP")
+        print(f"3 - Ice: Cost {spells['Ice']['MP_Cost']}")
     if 'fire2' in player.magic and fight is True:
-        print("4 - Fire2: Cost 5MP")
+        print(f"4 - Fire2: Cost {spells['Fire2']['MP_Cost']}")
     if 'lightning2' in player.magic and fight is True:
-        print("5 - Lightning2: Cost 5MP")
+        print(f"5 - Lightning2: Cost {spells['Lightning2']['MP_Cost']}")
     if 'ice2' in player.magic and fight is True:
-        print("6 - Ice2: Cost 5MP")
+        print(f"6 - Ice2: Cost {spells['Ice2']['MP_Cost']}")
     if 'heal' in player.magic:
-        print("7 - Heal: Cost 3MP, Heals some HP")
+        print(f"7 - Heal: Cost {spells['Heal']['MP_Cost']}, Heals some HP")
     if 'heal2' in player.magic:
-        print("8 - Heal: Cost 6MP, Heals more HP")
+        print(f"8 - Heal: Cost {spells['Heal2']['MP_Cost']}, Heals more HP")
     if 'heal3' in player.magic:
-        print("9 - Heal: Cost 10MP, Heals all HP")
+        print(f"9 - Heal: Cost {spells['Heal3']['MP_Cost']}, Heals all HP")
     print("0 - Go back")
     choice = input("> ")
     if choice == "1" and fight is True and 'fire' in player.magic:
@@ -311,7 +330,7 @@ def use_magic(player, fight=False, enemy=None):
         if player.MP >= 10:
             print("Using Heal 3.....")
             player.MP -= 10
-            heal = player.MAXHP - player.HP
+            heal = player.MAXHP
             player.HP = player.MAXHP
             print(line)
             print(f"{player.name} was healed {heal} HP.")

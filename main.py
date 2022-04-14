@@ -110,18 +110,15 @@ def main_menu(player_data):
             player_data, _ = use_inventory(player_data)
             clear()
         case "3":
+            clear()
             print(f"{player.name} knows these battle spells: ")
             for spell in player.magic:
                 if not spell.startswith('heal'):
-                    print(spell)
-            heals = [spell for spell in player.magic if spell.startswith('heal')]
-            if len(heals) == 0:
-                print(f"{player.name} doesn't know any healing spells. Visit the Magic Shop.")
-            else:
-                print(f"{player.name} knows these healing spells: ")
-                for spell in player.magic:
-                    if spell.startswith('heal'):
-                        print(spell)
+                    print(f"\t{spell}")
+            print(f"\n{player.name} knows these healing spells: ")
+            for spell in player.magic:
+                if spell.startswith('heal'):
+                    print(f"\t{spell}")
             player_data, _, _ = use_magic(player_data)
             clear()
         case "4":

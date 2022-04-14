@@ -1,5 +1,6 @@
 """Shop functions for magic and items"""
 from utilities import line, clear, error_msg
+from spells import spells
 
 
 not_enough = "You do not have sufficient Gold to purchase this item."
@@ -88,23 +89,23 @@ def magic_menu(player):
     print(line)
     print("MAGIC SHOP:")
     if 'fire' not in player.magic:
-        print("1. 50 Gold: Fire - Fire Attack")
+        print(f"1. {spells['Fire']['Purchase']} Gold: Fire - Fire Attack")
     if 'fire2' not in player.magic:
-        print("2. 100 Gold: Fire 2 - Advanced Fire Attack")
+        print(f"2. {spells['Fire2']['Purchase']} Gold: Fire 2 - Advanced Fire Attack")
     if 'ice' not in player.magic:
-        print("3. 50 Gold: Ice - Ice Attack")
+        print(f"3. {spells['Ice']['Purchase']} Gold: Ice - Ice Attack")
     if 'ice2' not in player.magic:
-        print("4. 100 Gold: Ice 2 - Advanced Ice Attack")
+        print(f"4. {spells['Ice2']['Purchase']} Gold: Ice 2 - Advanced Ice Attack")
     if 'lightning' not in player.magic:
-        print("5. 50 Gold: Lightning - Lightning Attack")
+        print(f"5. {spells['Lightning']['Purchase']} Gold: Lightning - Lightning Attack")
     if 'lightning2' not in player.magic:
-        print("6. 100 Gold: Lightning 2 - Advanced Lightning Attack")
+        print(f"6. {spells['Lightning2']['Purchase']} Gold: Lightning 2 - Advanced Lightning Attack")
     if 'heal' not in player.magic:
-        print("7. 50 Gold: Heal - Heals 20 HP")
+        print(f"7. {spells['Heal']['Purchase']} Gold: Heal - Heals 20 HP")
     if 'heal2' not in player.magic:
-        print("8. 100 Gold: Heal 2 - Heals 50 HP")
+        print(f"8. {spells['Heal2']['Purchase']} Gold: Heal 2 - Heals 50 HP")
     if 'heal3' not in player.magic:
-        print("9. 250 Gold: Heal 3 - Fully heals player")
+        print(f"9. {spells['Heal3']['Purchase']} Gold: Heal 3 - Fully heals player")
     print("0. Go back")
     print(line)
     return player
@@ -118,90 +119,78 @@ def magic_buy_error(player, cost):
     return player
 
 
+def magic_buy(player, cost, spell):
+    print(f"Purchasing Fire for {cost} Gold.")
+    player.magic.append(spell)
+    player.gold -= cost
+    return player
+
 def magic_shop(player):
     """Buy magic spells"""
     player = magic_menu(player)
     print(f"You have {player.gold} Gold available.")
     choice = input("< ")
     if choice == "1" and 'fire' not in player.magic:
-        if player.gold >= 50:
-            print("Purchasing Fire for 50 Gold.")
-            player.magic.append("fire")
-            player.gold -= 50
+        if player.gold >= spells['Fire']['Purchase']:
+            player = magic_buy(player, spells['Fire']['Purchase'], "fire")
         else:
-            player = magic_buy_error(player, 50)
+            player = magic_buy_error(player, spells['Fire']['Purchase'])
         input("> ")
         clear()
     elif choice == "2" and 'fire2' not in player.magic:
-        if player.gold >= 100:
-            print("Purchasing Fire 2 for 100 Gold.")
-            player.magic.append("fire2")
-            player.gold -= 100
+        if player.gold >= spells['Fire2']['Purchase']:
+            player = magic_buy(player, spells['Fire2']['Purchase'], "fire2")
         else:
-            player = magic_buy_error(player, 100)
+            player = magic_buy_error(player, spells['Fire2']['Purchase'])
         input("> ")
         clear()
     elif choice == "3" and 'ice' not in player.magic:
-        if player.gold >= 50:
-            print("Purchasing Ice for 50 Gold.")
-            player.magic.append("ice")
-            player.gold -= 50
+        if player.gold >= spells['Ice']['Purchase']:
+            player = magic_buy(player, spells['Ice']['Purchase'], "ice")
         else:
-            player = magic_buy_error(player, 50)
+            player = magic_buy_error(player, spells['Ice']['Purchase'])
         input("> ")
         clear()
     elif choice == "4" and 'ice2' not in player.magic:
-        if player.gold >= 100:
-            print("Purchasing Ice 2 for 100 Gold.")
-            player.magic.append("ice2")
-            player.gold -= 100
+        if player.gold >= spells['Ice2']['Purchase']:
+            player = magic_buy(player, spells['Ice2']['Purchase'], "ice2")
         else:
-            player = magic_buy_error(player, 100)
+            player = magic_buy_error(player, spells['Ice2']['Purchase'])
         input("> ")
         clear()
     elif choice == "5" and 'lightning' not in player.magic:
-        if player.gold >= 50:
-            print("Purchasing Lightning for 50 Gold.")
-            player.magic.append("lightning")
-            player.gold -= 50
+        if player.gold >= spells['Lightning']['Purchase']:
+            player = magic_buy(player, spells['Lightning']['Purchase'], "lightning")
         else:
-            player = magic_buy_error(player, 50)
+            player = magic_buy_error(player, spells['Lightning']['Purchase'])
         input("> ")
         clear()
     elif choice == "6" and 'lightning2' not in player.magic:
-        if player.gold >= 100:
-            print("Purchasing Lightning 2 for 100 Gold.")
-            player.magic.append("lightning2")
-            player.gold -= 100
+        if player.gold >= spells['Lightning2']['Purchase']:
+            player = magic_buy(player, spells['Lightning2']['Purchase'], "lightning2")
         else:
-            player = magic_buy_error(player, 100)
+            player = magic_buy_error(player, spells['Lightning2']['Purchase'])
         input("> ")
         clear()
     elif choice == "7" and 'heal' not in player.magic:
-        if player.gold >= 50:
-            print("Purchasing Heal for 50 Gold.")
-            player.magic.append("heal")
-            player.gold -= 50
+        if player.gold >= spells['Heal']['Purchase']:
+            player = magic_buy(player, spells['Heal']['Purchase'], "heal")
         else:
-            player = magic_buy_error(player, 50)
+            player = magic_buy_error(player, spells['Heal']['Purchase'])
         input("> ")
         clear()
     elif choice == "8" and 'heal2' not in player.magic:
-        if player.gold >= 100:
-            print("Purchasing Heal 2 for 100 Gold.")
-            player.magic.append("heal2")
-            player.gold -= 100
+        if player.gold >= spells['Heal2']['Purchase']:
+            player = magic_buy(player, spells['Heal2']['Purchase'], "heal2")
         else:
-            player = magic_buy_error(player, 100)
+            player = magic_buy_error(player, spells['Heal']['Purchase'])
         input("> ")
         clear()
     elif choice == "9" and 'heal3' not in player.magic:
-        if player.gold >= 250:
-            print("Purchasing Heal 3 for 50 Gold.")
-            player.magic.append("heal3")
-            player.gold -= 250
+        if player.gold >= spells['Heal3']['Purchase']:
+            player = magic_buy(player, spells['Heal3']['Purchase'], "heal3")
         else:
-            player = magic_buy_error(player, 250)
+            player = magic_buy_error(player, spells['Heal3']['Purchase'])
         input("> ")
         clear()
     elif choice == "0":
