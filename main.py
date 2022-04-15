@@ -1,8 +1,8 @@
 """Main file for the ASCII RPG"""
 import colorama
-import os
 import random
 
+import maps
 from enemies import Enemy, enemy_list
 from maps import starting_map, biomes, town_map
 from pathlib import Path
@@ -73,23 +73,26 @@ def create_new_player():
     clear()
     player_data = Player()
 
-    def name_player():
+    def name_player(player_data):
         """Give the player a name"""
         name = input("What is your name? ")
         clear()
         if len(name) <= 2:
             print("Name must be 3 or more characters.")
             input("> ")
-            name_player()
+            name_player(player_data)
         else:
             player_data.name = name
-    name_player()
+    name_player(player_data)
     print(f"Welcome to the game, {player_data.name}!")
     return player_data
 
 
-def main_menu(player_data):
-    """Prints menu options after the game has started"""
+def main_menu(player_data, starting_map, town_map):
+    """Prints menu options after the game has started
+    :param player_data Player object
+    :param starting_map The initial map for the game
+    :param town_map Map of the town area"""
     global intro, play, run, setup
     clear()
     print(line)
@@ -125,7 +128,7 @@ def main_menu(player_data):
             player_data, _, _ = use_magic(player_data)
             clear()
         case "4":
-            save(player_data)
+            save(player_data, [starting_map, town_map])
             input("> ")
         case "5":
             print("Are you sure you want to load a game?  This will overwrite your existing game! (Y/N)")
@@ -133,9 +136,9 @@ def main_menu(player_data):
             match choice2.split():
                 case ['Y'] | ['y']:
                     print("Loading Game")
-                    player_data = load()
+                    player_data, starting_map, town_map = load()
                 case ['N'] | ['n']:
-                    main_menu(player_data)
+                    main_menu(player_data, starting_map, town_map)
                 case _:
                     input(error_msg)
         case "6":
@@ -146,7 +149,7 @@ def main_menu(player_data):
                     print("Loading New Game")
                     player_data = create_new_player()
                 case ['N'] | ['n']:
-                    main_menu(player_data)
+                    main_menu(player_data, starting_map, town_map)
                 case _:
                     input(error_msg)
         case "7":
@@ -160,52 +163,61 @@ def main_menu(player_data):
         case _:
             input(error_msg)
             clear()
-            main_menu(player_data)
+            main_menu(player_data, starting_map, town_map)
 
     return player_data
 
 
-def save(player_data):
+def save(player_data, maps: list):
     """Save the game to a local file
     :param player_data Player object to be saved
+    :param maps List of all maps to be saved
     """
-    # Set player to start of the map for consistency
-    # Can remove this once map info is saved with the player but could cause an error if out of bounds on main map
-    player.x = 0
-    player.y = 0
 
+    # Add more maps as they are created
+    starting_map = maps[0]
+    town_map = maps[1]
     save_file = input("Enter a name for your save file: ")
     if Path(f"{save_file}.pkl").is_file():
         choice_ = input(f"A save named {save_file} already exists, do you want to overwrite it? (y/n) ")
         match choice_:
             case 'y':
-                with open(f"{save_file}.pkl", "wb") as file:
+                with open(f"saves/{save_file}.pkl", "wb") as file, \
+                        open(f"saves/{save_file}_starting_map.pkl", "wb") as starting_map_file, \
+                        open(f"saves/{save_file}_town_map.pkl", "wb") as town_map_file:
                     pickle.dump(player_data, file, pickle.HIGHEST_PROTOCOL)
+                    pickle.dump(starting_map, starting_map_file, pickle.HIGHEST_PROTOCOL)
+                    pickle.dump(town_map, town_map_file, pickle.HIGHEST_PROTOCOL)
             case 'n':
-                save(player_data)
+                save(player_data, [starting_map, town_map])
             case _:
                 print("Input not understood.")
-                save(player_data)
+                save(player_data, [starting_map, town_map])
     else:
-        with open(f"{save_file}.pkl", "wb") as file:
+        with open(f"saves/{save_file}.pkl", "wb") as file, \
+                open(f"saves/{save_file}_starting_map.pkl", "wb") as starting_map_file, \
+                open(f"saves/{save_file}_town_map.pkl", "wb") as town_map_file:
             pickle.dump(player_data, file, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(starting_map, starting_map_file, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(town_map, town_map_file, pickle.HIGHEST_PROTOCOL)
     print(f"Player data saved as {save_file}")
 
 
 def load():
     """Loads the game from a local file.  Returns loaded player data."""
-    path = Path('.')
+    global starting_map, town_map
+    path = Path('./saves/')
     saves = []
     # Put all save files in a list
     for file in path.iterdir():
-        if file.is_file() and file.name.endswith('.pkl'):
-            saves.append(file.name)
+        if file.is_file() and file.name.endswith('.pkl') and not file.name.endswith('map.pkl'):
+            saves.append(file.name.split('.pkl')[0])
     # If no saves available, start new game
     if len(saves) == 0:
         print("No save data found. Starting new game.")
         input("> ")
         player_data = create_new_player()
-        return player_data
+        return player_data, starting_map, town_map
 
     # Print all save files available
     print("Available save files:")
@@ -216,12 +228,16 @@ def load():
         choice_ = int(choice_)
         # Load save file and return player data
         if choice_ in [x for x in range(1, len(saves) + 1)]:
-            with open(saves[choice_ - 1], "rb") as save_file:
+            with open(f"saves/{saves[choice_ - 1]}.pkl", "rb") as save_file:
                 player_data = pickle.load(save_file)
+            with open(f"saves/{saves[choice_ - 1]}_starting_map.pkl", "rb") as starting_map_file:
+                starting_map = pickle.load(starting_map_file)
+            with open(f"saves/{saves[choice_ - 1]}_town_map.pkl", "rb") as town_map_file:
+                town_map = pickle.load(town_map_file)
             clear()
             print(f"Welcome back {player_data.name}!")
             input("> ")
-            return player_data
+            return player_data, starting_map, town_map
         else:
             player_data = None
             clear()
@@ -369,10 +385,13 @@ while run:
                 setup = True
                 intro = False
             case "2":
-                player = load()
+                player, starting_map, town_map = load()
                 if player is None:
                     continue
-                current_map, x_max, y_max = set_map(starting_map)
+                if player.map == 'starting_map':
+                    current_map, x_max, y_max = set_map(starting_map)
+                elif player.map == 'town_map':
+                    current_map, x_max, y_max = set_map(town_map)
                 intro = False
                 setup = False
                 play = True
@@ -417,7 +436,7 @@ while run:
             print(f"9 to return to map")
         destination = input("> ")
         if destination == "0":
-            player = main_menu(player)
+            player = main_menu(player, starting_map, town_map)
         elif destination == "w" or destination == "W":
             standing = False
             if player.x > 0:
@@ -449,12 +468,14 @@ while run:
             player = magic_shop(player)
             standing = True
         elif current_tile == 'town' and destination == '3':
+            player.map = 'town_map'
             current_map, x_max, y_max = set_map(town_map)
             player.x = 0
             player.y = 0
         elif current_tile == 'inn' and destination == '4':
                 player = inn(player)
-        elif current_tile == 'entrance' and destination == '9':
+        elif current_tile == 'entrance' and destination == '9' and player.map == 'town_map':
+            player.map = 'starting_map'
             current_map, x_max, y_max = set_map(starting_map)
             player.x = 3
             player.y = 2

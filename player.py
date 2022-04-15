@@ -73,6 +73,7 @@ class Player:
         self.y = 0
         self.XP = 0
         self.level = 1
+        self.map = 'starting_map'
 
 
 def print_player_info(player):
