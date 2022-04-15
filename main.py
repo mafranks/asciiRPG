@@ -5,6 +5,7 @@ import random
 
 from enemies import Enemy, enemy_list
 from maps import starting_map, biomes, town_map
+from pathlib import Path
 from player import Player, use_inventory, print_player_info, use_magic, level_up_check
 from shops import item_shop, magic_shop, inn
 from utilities import clear, error_msg, line, main_map_line, town_line
@@ -24,16 +25,18 @@ player = None  # Initializes the player object
 fight = False  # Indicates a battle sequence is underway
 standing = True  # Avoids fight change immediately upon start of game and while using menus
 
-save_file = "save_file.pkl"
 # colorama allows you to color text in the console
 colorama.init()
 
+
 def set_map(target_map):
-    """Set the current map to use and provide map boundaries"""
-    current_map = target_map
-    x_max = len(current_map) - 1
-    y_max = len(current_map[0]) - 1
-    return current_map, x_max, y_max
+    """Set the current map to use and provide map boundaries
+    param: target_map The map that will be loaded
+    """
+    cur_map = target_map
+    x__max = len(cur_map) - 1
+    y__max = len(cur_map[0]) - 1
+    return cur_map, x__max, y__max
 
 
 def print_start_menu():
@@ -68,7 +71,7 @@ def print_rules():
 def create_new_player():
     """Create player object"""
     clear()
-    player = Player()
+    player_data = Player()
 
     def name_player():
         """Give the player a name"""
@@ -79,10 +82,10 @@ def create_new_player():
             input("> ")
             name_player()
         else:
-            player.name = name
+            player_data.name = name
     name_player()
-    print(f"Welcome to the game, {player.name}!")
-    return player
+    print(f"Welcome to the game, {player_data.name}!")
+    return player_data
 
 
 def main_menu(player_data):
@@ -163,39 +166,91 @@ def main_menu(player_data):
 
 
 def save(player_data):
-    """Save the game to a local file"""
+    """Save the game to a local file
+    :param player_data Player object to be saved
+    """
     # Set player to start of the map for consistency
+    # Can remove this once map info is saved with the player but could cause an error if out of bounds on main map
     player.x = 0
     player.y = 0
-    with open(save_file, "wb") as file:
-        pickle.dump(player_data, file, pickle.HIGHEST_PROTOCOL)
-    print("Player data saved")
+
+    save_file = input("Enter a name for your save file: ")
+    if Path(f"{save_file}.pkl").is_file():
+        choice_ = input(f"A save named {save_file} already exists, do you want to overwrite it? (y/n) ")
+        match choice_:
+            case 'y':
+                with open(f"{save_file}.pkl", "wb") as file:
+                    pickle.dump(player_data, file, pickle.HIGHEST_PROTOCOL)
+            case 'n':
+                save(player_data)
+            case _:
+                print("Input not understood.")
+                save(player_data)
+    else:
+        with open(f"{save_file}.pkl", "wb") as file:
+            pickle.dump(player_data, file, pickle.HIGHEST_PROTOCOL)
+    print(f"Player data saved as {save_file}")
 
 
 def load():
-    """Loads the game from a local file"""
-    if os.path.exists(save_file):
-        with open(save_file, "rb") as file:
-            player_data = pickle.load(file)
+    """Loads the game from a local file.  Returns loaded player data."""
+    path = Path('.')
+    saves = []
+    # Put all save files in a list
+    for file in path.iterdir():
+        if file.is_file() and file.name.endswith('.pkl'):
+            saves.append(file.name)
+    # If no saves available, start new game
+    if len(saves) == 0:
+        print("No save data found. Starting new game.")
+        input("> ")
+        player_data = create_new_player()
+        return player_data
+
+    # Print all save files available
+    print("Available save files:")
+    for index, save_file in enumerate(saves):
+        print(f"\t{index + 1} - {save_file}")
+    choice_ = input("Which number would you like to load? ")
+    try:
+        choice_ = int(choice_)
+        # Load save file and return player data
+        if choice_ in [x for x in range(1, len(saves) + 1)]:
+            with open(saves[choice_ - 1], "rb") as save_file:
+                player_data = pickle.load(save_file)
+            clear()
             print(f"Welcome back {player_data.name}!")
+            input("> ")
             return player_data
-    else:
-        print("No save file found.")
+        else:
+            player_data = None
+            clear()
+            print("Please enter a number based on the list options.")
+            input("> ")
+    except ValueError:
+        player_data = None
+        clear()
+        print("Please enter a number based on the list options.")
+        input("> ")
+    return player_data
 
 
-def display_map(current_map, player):
-    """Displays the explored section of the current map"""
+def display_map(cur_map, player_data):
+    """Displays the explored section of the current map
+    :param cur_map Map to be displayed
+    :param player_data Current player object to be displayed on the map
+    """
     # Counts are needed to see if player is on that tile
     row_count = 0
-    for row in range(len(current_map)):
-        if len(current_map[0]) == 7:
+    for row in range(len(cur_map)):
+        if len(cur_map[0]) == 7:
             print(f"\n{main_map_line}")
-        elif len(current_map[0]) == 2:
+        elif len(cur_map[0]) == 2:
             print(f"\n{town_line}")
         tile_count = 0
-        for tile in current_map[row]:
+        for tile in cur_map[row]:
             if tile['visible'] is True:
-                if (row_count, tile_count) == (player.x, player.y):
+                if (row_count, tile_count) == (player_data.x, player_data.y):
                     print(colorama.Fore.GREEN + f"{biomes[tile['type']]['display']} \033[39m",  end='')
                 else:
                     print(f"{biomes[tile['type']]['display']} ",  end='')
@@ -203,9 +258,9 @@ def display_map(current_map, player):
                 print('XXXXXXXXX| ', end='')
             tile_count += 1
         row_count += 1
-    if len(current_map[0]) == 7:
+    if len(cur_map[0]) == 7:
         print(f"\n{main_map_line}")
-    elif len(current_map[0]) == 2:
+    elif len(cur_map[0]) == 2:
         print(f"\n{town_line}")
 
 
@@ -315,6 +370,8 @@ while run:
                 intro = False
             case "2":
                 player = load()
+                if player is None:
+                    continue
                 current_map, x_max, y_max = set_map(starting_map)
                 intro = False
                 setup = False
