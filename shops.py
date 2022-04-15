@@ -106,6 +106,8 @@ def magic_menu(player):
         print(f"8. {spells['Heal2']['Purchase']} Gold: Heal 2 - Heals 50 HP")
     if 'heal3' not in player.magic:
         print(f"9. {spells['Heal3']['Purchase']} Gold: Heal 3 - Fully heals player")
+    if len(player.magic) == 9:
+        print("Congratulations, you have purchased all available spells!")
     print("0. Go back")
     print(line)
     return player

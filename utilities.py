@@ -6,7 +6,6 @@ error_msg = "Input not understood"
 
 line = "-" * 17
 main_map_line = "-" * 76
-town_line = "-" * 21
 
 
 def clear():
