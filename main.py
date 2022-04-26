@@ -2,6 +2,7 @@
 import colorama
 import random
 
+import maps
 from enemies import Enemy, enemy_list
 from maps import starting_map, biomes, town_map, castle_map, cave_map
 from pathlib import Path
@@ -78,13 +79,14 @@ def create_new_player():
           "\t4 -White Mage\n"
           "\t5 -Blue Mage\n")
     if choice in ["1", "2", "3", "4", "5", "tester"]:
-        print(choice)
         player_data = Player(choice)
     else:
         create_new_player()
 
+
     def name_player(player_data):
-        """Give the player a name"""
+        """Give the player a name
+        :param player_data Player object for the current player"""
         name = input("What is your name? ")
         clear()
         if len(name) <= 2:
@@ -157,11 +159,12 @@ def main_menu(player_data, maps):
         case "6":
             print("Are you sure you want to start a new game?  This will overwrite your existing game! (Y/N)")
             choice2 = input("> ")
-            match choice2.split():
-                case ['Y'] | ['y']:
-                    print("Loading New Game")
-                    player_data = create_new_player()
-                case ['N'] | ['n']:
+            match choice2:
+                case 'Y' | 'y':
+                    input("Press enter to load new game...")
+                    play = False
+                    setup = True
+                case 'N' | 'n':
                     main_menu(player_data, [starting_map, town_map, cave_map, castle_map])
                 case _:
                     input(error_msg)
@@ -432,6 +435,12 @@ while run:
     while setup:
         clear()
         player = create_new_player()
+        print(starting_map)
+        starting_map = maps.starting_map
+        print(starting_map)
+        town_map = maps.town_map
+        castle_map = maps.castle_map
+        cave_map = maps.cave_map
         current_map, x_max, y_max = set_map(starting_map)
         input("> ")
         play = True
@@ -529,7 +538,6 @@ while run:
             player.x = 3
             player.y = 3
         else:
-            print(current_tile, destination, player.map)
             input(error_msg)
 
 print("Thanks for playing!")
