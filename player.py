@@ -17,6 +17,99 @@ levels = {
     10: {"xp_required": 20000, "atk_up": random.randint(10, 50), "hp_up": random.randint(10, 50), "mp_up": random.randint(10, 50)}
 }
 
+classes = {
+    'tester': {
+        'HP': 5000,
+        'MAXHP': 5000,
+        'MP': 1000,
+        'MAXMP': 1000,
+        'magic': ['heal', 'heal2', 'heal3', 'fire', 'fire2', 'ice', 'ice2', 'lightning', 'lightning2'],
+        'gold': 5000,
+        'potions': 100,
+        'mid_potions': 100,
+        'high_potions': 100,
+        'ethers': 100,
+        'mid_ethers': 100,
+        'high_ethers': 100,
+        'attack': 100
+    },
+    'red_mage': {
+        'HP': 40,
+        'MAXHP': 40,
+        'MP': 60,
+        'MAXMP': 60,
+        'magic': ['heal', 'fire'],
+        'gold': 0,
+        'potions': 1,
+        'mid_potions': 0,
+        'high_potions': 0,
+        'ethers': 1,
+        'mid_ethers': 0,
+        'high_ethers': 0,
+        'attack': 8
+    },
+    'white_mage': {
+        'HP': 40,
+        'MAXHP': 40,
+        'MP': 60,
+        'MAXMP': 60,
+        'magic': ['heal', 'heal2'],
+        'gold': 0,
+        'potions': 1,
+        'mid_potions': 0,
+        'high_potions': 0,
+        'ethers': 1,
+        'mid_ethers': 0,
+        'high_ethers': 0,
+        'attack': 8
+    },
+    'barbarian': {
+        'HP': 100,
+        'MAXHP': 100,
+        'MP': 0,
+        'MAXMP': 0,
+        'magic': [],
+        'gold': 0,
+        'potions': 1,
+        'mid_potions': 0,
+        'high_potions': 0,
+        'ethers': 1,
+        'mid_ethers': 0,
+        'high_ethers': 0,
+        'attack': 20
+    },
+    'thief': {
+        'HP': 60,
+        'MAXHP': 60,
+        'MP': 30,
+        'MAXMP': 30,
+        'magic': ['lightning'],
+        'gold': 0,
+        'potions': 1,
+        'mid_potions': 0,
+        'high_potions': 0,
+        'ethers': 1,
+        'mid_ethers': 0,
+        'high_ethers': 0,
+        'attack': 8
+    },
+    'blue_mage': {
+        'HP': 40,
+        'MAXHP': 40,
+        'MP': 60,
+        'MAXMP': 60,
+        'magic': ['heal', 'ice'],
+        'gold': 0,
+        'potions': 1,
+        'mid_potions': 0,
+        'high_potions': 0,
+        'ethers': 1,
+        'mid_ethers': 0,
+        'high_ethers': 0,
+        'attack': 8
+    }
+}
+
 
 def level_up_check(player):
     """Check to see if the player has leveled up"""
@@ -37,38 +130,36 @@ class Player:
     """Player object containing all the player related stats"""
     testing = True
 
-    def __init__(self):
+    def __init__(self, choice):
+        player_type = ''
+        match choice:
+            case "1":
+                player_type = 'barbarian'
+            case "2":
+                player_type = 'thief'
+            case "3":
+                player_type = 'red_mage'
+            case "4":
+                player_type = 'white_mage'
+            case "5":
+                player_type = 'blue_mage'
+            case "tester":
+                player_type = 'tester'
         self.name = ''
-        # To make testing easier have lots of cheats
-        if self.testing:
-            self.HP = 5000
-            self.MAXHP = 5000
-            self.MP = 1000
-            self.MAXMP = 1000
-            self.magic = ['heal', 'heal2', 'heal3', 'fire', 'fire2', 'ice', 'ice2', 'lightning', 'lightning2']
-            self.gold = 5000
-            self.potions = 100
-            self.mid_potions = 100
-            self.high_potions = 100
-            self.ethers = 100
-            self.mid_ethers = 100
-            self.high_ethers = 100
-            self.attack = 100
-        else:
-            self.HP = 50
-            self.MAXHP = 50
-            self.MP = 10
-            self.MAXMP = 10
-            # Player starts with heal and one other random spell from fire, ice and lightning
-            self.magic = ['heal', random.sample(["fire", "ice", "lightning"], 1)[0]]
-            self.gold = 0
-            self.potions = 1
-            self.mid_potions = 0
-            self.high_potions = 0
-            self.ethers = 1
-            self.mid_ethers = 0
-            self.high_ethers = 0
-            self.attack = 10
+        self.HP = classes[player_type]['HP']
+        self.MAXHP = classes[player_type]['MAXHP']
+        self.MP = classes[player_type]['MP']
+        self.MAXMP = classes[player_type]['MAXMP']
+        self.magic = classes[player_type]['magic']
+        self.gold = classes[player_type]['gold']
+        self.potions = classes[player_type]['potions']
+        self.mid_potions = classes[player_type]['mid_potions']
+        self.high_potions = classes[player_type]['high_potions']
+        self.ethers = classes[player_type]['ethers']
+        self.mid_ethers = classes[player_type]['mid_ethers']
+        self.high_ethers = classes[player_type]['high_ethers']
+        self.attack = classes[player_type]['attack']
+        self.player_type = player_type
         self.x = 0
         self.y = 0
         self.XP = 0

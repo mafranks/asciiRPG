@@ -69,8 +69,19 @@ def print_rules():
 
 def create_new_player():
     """Create player object"""
+    player_data = None
     clear()
-    player_data = Player()
+    choice = input("Choose a player type:\n"
+          "\t1 -Barbarian\n"
+          "\t2 -Thief\n"
+          "\t3 -Red Mage\n"
+          "\t4 -White Mage\n"
+          "\t5 -Blue Mage\n")
+    if choice in ["1", "2", "3", "4", "5", "tester"]:
+        print(choice)
+        player_data = Player(choice)
+    else:
+        create_new_player()
 
     def name_player(player_data):
         """Give the player a name"""
