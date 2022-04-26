@@ -71,6 +71,7 @@ def print_rules():
 def create_new_player():
     """Create player object"""
     player_data = None
+    player_type = ''
     clear()
     choice = input("Choose a player type:\n"
           "\t1 -Barbarian\n"
@@ -78,11 +79,28 @@ def create_new_player():
           "\t3 -Red Mage\n"
           "\t4 -White Mage\n"
           "\t5 -Blue Mage\n")
-    if choice in ["1", "2", "3", "4", "5", "tester"]:
-        player_data = Player(choice)
-    else:
-        create_new_player()
-
+    match choice:
+        case "1":
+            player_type = 'barbarian'
+            player_data = Player(player_type)
+        case "2":
+            player_type = 'thief'
+            player_data = Player(player_type)
+        case "3":
+            player_type = 'red_mage'
+            player_data = Player(player_type)
+        case "4":
+            player_type = 'white_mage'
+            player_data = Player(player_type)
+        case "5":
+            player_type = 'blue_mage'
+            player_data = Player(player_type)
+        case "tester":
+            player_type = 'tester'
+            player_data = Player(player_type)
+        case _:
+            input("Input not from available options. Try again.")
+            create_new_player()
 
     def name_player(player_data):
         """Give the player a name
@@ -338,7 +356,7 @@ def battle(current_enemy, player_data):
                     if action_taken is True:
                         break
                 case "3":
-                    player_data, action_taken = use_inventory(player_data)
+                    player_data, action_taken = use_inventory(player_data, fight=True)
                     clear()
                     if action_taken is True:
                         break
@@ -435,9 +453,7 @@ while run:
     while setup:
         clear()
         player = create_new_player()
-        print(starting_map)
         starting_map = maps.starting_map
-        print(starting_map)
         town_map = maps.town_map
         castle_map = maps.castle_map
         cave_map = maps.cave_map

@@ -16,6 +16,7 @@ def item_menu():
     print("4. 10 Gold: Ether - Heals 2 MP")
     print("5. 20 Gold: Mid-Ether - Heals 5 MP")
     print("6. 40 Gold: High-Ether - Heals 10 MP")
+    print("7. 250 Gold: Tent - Fully heals HP and MP")
     print("0. Go back")
     print(line)
 
@@ -32,6 +33,7 @@ def item_shop(player):
                 print("Purchasing Potion for 5 Gold.")
                 player.potions += 1
                 player.gold -= 5
+                input("> ")
             else:
                 input(not_enough)
             clear()
@@ -40,6 +42,7 @@ def item_shop(player):
                 print("Purchasing Mid-Potion for 15 Gold.")
                 player.mid_potions += 1
                 player.gold -= 15
+                input("> ")
             else:
                 input(not_enough)
             clear()
@@ -48,6 +51,7 @@ def item_shop(player):
                 print("Purchasing High-Potion for 30 Gold.")
                 player.high_potions += 1
                 player.gold -= 30
+                input("> ")
             else:
                 input(not_enough)
             clear()
@@ -56,6 +60,7 @@ def item_shop(player):
                 print("Purchasing Ether for 10 Gold.")
                 player.ethers += 1
                 player.gold -= 10
+                input("> ")
             else:
                 input(not_enough)
             clear()
@@ -64,6 +69,7 @@ def item_shop(player):
                 print("Purchasing Mid-Ether for 20 Gold.")
                 player.mid_ethers += 1
                 player.gold -= 20
+                input("> ")
             else:
                 input(not_enough)
             clear()
@@ -72,6 +78,16 @@ def item_shop(player):
                 print("Purchasing High-Ether for 40 Gold.")
                 player.high_ethers += 1
                 player.gold -= 40
+                input("> ")
+            else:
+                input(not_enough)
+            clear()
+        case "7":
+            if player.gold >= 250:
+                print("Purchasing Tent for 250 Gold.")
+                player.tent += 1
+                player.gold -= 250
+                input("> ")
             else:
                 input(not_enough)
             clear()

@@ -130,21 +130,7 @@ class Player:
     """Player object containing all the player related stats"""
     testing = True
 
-    def __init__(self, choice):
-        player_type = ''
-        match choice:
-            case "1":
-                player_type = 'barbarian'
-            case "2":
-                player_type = 'thief'
-            case "3":
-                player_type = 'red_mage'
-            case "4":
-                player_type = 'white_mage'
-            case "5":
-                player_type = 'blue_mage'
-            case "tester":
-                player_type = 'tester'
+    def __init__(self, player_type):
         self.name = ''
         self.HP = classes[player_type]['HP']
         self.MAXHP = classes[player_type]['MAXHP']
@@ -158,6 +144,7 @@ class Player:
         self.ethers = classes[player_type]['ethers']
         self.mid_ethers = classes[player_type]['mid_ethers']
         self.high_ethers = classes[player_type]['high_ethers']
+        self.tents = 0
         self.attack = classes[player_type]['attack']
         self.player_type = player_type
         self.x = 0
@@ -205,7 +192,7 @@ def magic_error(spell, player):
 line = "--------------------"
 
 
-def use_inventory(player):
+def use_inventory(player, fight=False):
     """Use available inventory items
     :param player Player object for the current game"""
     clear()
@@ -223,40 +210,47 @@ def use_inventory(player):
         print(f"5 - Mid Ether: {player.mid_ethers}")
     if player.high_ethers > 0:
         print(f"6 - High Ether: {player.high_ethers}")
+    if player.tents > 0 and fight is False:
+        print(f"7 - Tent: {player.tents}")
     print("0 - Go back")
     choice = input("> ")
-    match choice.split():
-        case ["1"]:
+    match choice:
+        case "1":
             if player.potions > 0:
                 player.HP += 10
                 print(f"{player.name} regained 10 HP")
                 player.potions -= 1
-        case ["2"]:
+        case "2":
             if player.mid_potions > 0:
                 player.HP += 25
                 print(f"{player.name} regained 25 HP")
                 player.mid_potions -= 1
-        case ["3"]:
+        case "3":
             if player.high_potions > 0:
                 player.HP += 50
                 print(f"{player.name} regained 50 HP")
                 player.high_potions -= 1
-        case ["4"]:
+        case "4":
             if player.ethers > 0:
                 player.MP += 2
                 print(f"{player.name} regained 2 MP")
                 player.ethers -= 1
-        case ["5"]:
+        case "5":
             if player.mid_ethers > 0:
                 player.MP += 5
                 print(f"{player.name} regained 5 MP")
                 player.mid_ethers -= 1
-        case ["6"]:
+        case "6":
             if player.high_ethers > 0:
                 player.MP += 10
                 print(f"{player.name} regained 10 MP")
                 player.high_ethers -= 1
-        case ["0"]:
+        case "7":
+            if player.tents > 0 and fight is False:
+                player.HP = player.MAXHP
+                player.MP = player.MAXMP
+                player.tents -= 1
+        case "0":
             return player, False
         case _:
             input(error_msg)
