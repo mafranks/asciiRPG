@@ -529,6 +529,7 @@ while run:
             player.x = 3
             player.y = 3
         else:
+            print(current_tile, destination, player.map)
             input(error_msg)
 
 print("Thanks for playing!")

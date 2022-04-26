@@ -273,7 +273,7 @@ def use_inventory(player):
     return player, True
 
 
-def process_spell(player, enemy, spell):
+def use_spell(player, enemy, spell):
     """Process the damage/heal effect of a spell
     :param player Player object for the current game
     :param enemy Enemy object or the current battle
@@ -335,62 +335,62 @@ def use_magic(player, fight=False, enemy=None):
     if 'heal' in player.magic:
         print(f"7 - Heal: Cost {spells['heal']['MP_Cost']}, Heals some HP")
     if 'heal2' in player.magic:
-        print(f"8 - Heal: Cost {spells['heal2']['MP_Cost']}, Heals more HP")
+        print(f"8 - Heal2: Cost {spells['heal2']['MP_Cost']}, Heals more HP")
     if 'heal3' in player.magic:
-        print(f"9 - Heal: Cost {spells['heal3']['MP_Cost']}, Heals all HP")
+        print(f"9 - Heal3: Cost {spells['heal3']['MP_Cost']}, Heals all HP")
     print("0 - Go back")
     choice = input("> ")
     if choice == "1" and fight is True and 'fire' in player.magic:
         if player.MP >= spells['fire']['MP_Cost']:
-            player, enemy = process_spell(player, enemy, 'fire')
+            player, enemy = use_spell(player, enemy, 'fire')
         else:
             magic_error('fire', player)
             return player, enemy, False
     elif choice == "2" and fight is True and 'lightning' in player.magic:
         if player.MP >= spells['lightning']['MP_Cost']:
-            player, enemy = process_spell(player, enemy, 'lightning')
+            player, enemy = use_spell(player, enemy, 'lightning')
         else:
             magic_error('lightning', player)
             return player, enemy, False
     elif choice == "3" and fight is True and 'ice' in player.magic:
         if player.MP >= spells['ice']['MP_Cost']:
-            player, enemy = process_spell(player, enemy, 'ice')
+            player, enemy = use_spell(player, enemy, 'ice')
         else:
             magic_error('ice', player)
             return player, enemy, False
     elif choice == "4" and fight is True and 'fire2' in player.magic:
         if player.MP >= spells['fire2']['MP_Cost']:
-            player, enemy = process_spell(player, enemy, 'fire2')
+            player, enemy = use_spell(player, enemy, 'fire2')
         else:
             magic_error('fire2', player)
             return player, enemy, False
     elif choice == "5" and fight is True and 'lightning2' in player.magic:
         if player.MP >= spells['lightning2']['MP_Cost']:
-            player, enemy = process_spell(player, enemy, 'lightning2')
+            player, enemy = use_spell(player, enemy, 'lightning2')
         else:
             magic_error('lightning2', player)
             return player, enemy, False
     elif choice == "6" and fight is True and 'ice2' in player.magic:
         if player.MP >= spells['ice2']['MP_Cost']:
-            player, enemy = process_spell(player, enemy, 'ice2')
+            player, enemy = use_spell(player, enemy, 'ice2')
         else:
             magic_error('ice2', player)
             return player, enemy, False
     elif choice == "7" and 'heal' in player.magic:
         if player.MP >= spells['heal']['MP_Cost']:
-            player, enemy = process_spell(player, enemy, 'heal')
+            player, enemy = use_spell(player, enemy, 'heal')
         else:
             magic_error('heal', player)
             return player, enemy, False
     elif choice == "8" and 'heal2' in player.magic:
         if player.MP >= spells['heal2']['MP_Cost']:
-            player, enemy = process_spell(player, enemy, 'heal2')
+            player, enemy = use_spell(player, enemy, 'heal2')
         else:
             magic_error('heal2', player)
             return player, enemy, False
     elif choice == "9" and 'heal3' in player.magic:
         if player.MP >= spells['heal3']['MP_Cost']:
-            player, enemy = process_spell(player, enemy, 'heal3')
+            player, enemy = use_spell(player, enemy, 'heal3')
         else:
             magic_error('heal3', player)
             return player, enemy, False
