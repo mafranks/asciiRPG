@@ -31,7 +31,7 @@ town_map = [
     [{"type": "entrance", "visible": True}, {"type": "sidewalk", "visible": False},
      {"type": "sidewalk", "visible": False}, {"type": "sidewalk", "visible": False},
      {"type": "sidewalk", "visible": False}, {"type": "sidewalk", "visible": False},
-     {"type": "sidewalk", "visible": False}],
+     {"type": "clayton", "visible": False}],
 
     [{"type": "sidewalk", "visible": False}, {"type": "sidewalk", "visible": False},
      {"type": "sidewalk", "visible": False}, {"type": "inn", "visible": False},
@@ -41,7 +41,7 @@ town_map = [
     [{"type": "sidewalk", "visible": False}, {"type": "town_hall", "visible": False},
      {"type": "sidewalk", "visible": False}, {"type": "sidewalk", "visible": False},
      {"type": "magic_shop", "visible": False}, {"type": "sidewalk", "visible": False},
-     {"type": "sidewalk", "visible": False},]
+     {"type": "sidewalk", "visible": False}]
 ]
 
 cave_map = [
@@ -88,7 +88,7 @@ castle_map = [
      {"type": "stone", "visible": False}],
 
     [{"type": "stone", "visible": False}, {"type": "stone", "visible": False}, {"type": "stone", "visible": False},
-     {"type": "stone", "visible": False}, {"type": "stone", "visible": False}, {"type": "stone", "visible": False},
+     {"type": "stone", "visible": False}, {"type": "tower_door", "visible": False}, {"type": "stone", "visible": False},
      {"type": "chest_spc", "visible": False}],
 
     [{"type": "stone", "visible": False}, {"type": "chest", "visible": False}, {"type": "stone", "visible": False},
@@ -190,11 +190,21 @@ biomes = {
     "chest": {
         "text": "CHEST",
         "display": "  CHEST   ",
-        "enemies": True
+        "enemies": False
     },
     "chest_spc": {
         "text": "CHEST",
         "display": "  CHEST   ",
-        "enemies": True
+        "enemies": False
+    },
+    "clayton": {
+        "text": "CLAYTON",
+        "display": " CLAYTON  ",
+        "enemies": False
+    },
+    "tower_door": {
+        "text": "TOWER DOOR",
+        "display": "TOWER DOOR",
+        "enemies": False
     }
 }

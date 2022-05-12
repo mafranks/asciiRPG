@@ -35,7 +35,7 @@ enemy_stats = {
         "Gold": [5, 10],
         "XP": 6,
         "Terrain": ['plains', 'fields', 'hills'],
-        "Levels": [1-3],
+        "Levels": [1, 2, 3],
         "Resistance": ['fire'],
         "Immunity": []
     },
@@ -46,7 +46,7 @@ enemy_stats = {
         "Gold": [10, 15],
         "XP": 18,
         "Terrain": ['plains', 'fields', 'hills'],
-        "Levels": [1 - 4],
+        "Levels": [1, 2, 3, 4],
         "Resistance": ['fire2'],
         "Immunity": ['fire']
     },
@@ -58,7 +58,7 @@ enemy_stats = {
         "Gold": [5, 30],
         "XP": 25,
         "Terrain": ['plains', 'fields', 'hills'],
-        "Levels": [1-3],
+        "Levels": [1, 2, 3],
         "Resistance": ['fire'],
         "Immunity": []
     },
@@ -69,7 +69,7 @@ enemy_stats = {
         "Gold": [8, 20],
         "XP": 30,
         "Terrain": ['plains', 'forest', 'fields', 'hills'],
-        "Levels": [1-4],
+        "Levels": [1, 2, 3, 4],
         "Resistance": ['fire'],
         "Immunity": []
     },
@@ -80,22 +80,21 @@ enemy_stats = {
         "Gold": [5, 10],
         "XP": 24,
         "Terrain": ['plains', 'forest', 'fields', 'hills'],
-        "Levels": [1 - 4],
+        "Levels": [1, 2, 3, 4],
         "Resistance": ['fire'],
         "Immunity": []
     },
-}
-
-final_enemy = {
-    "Dragon": {
-        "Name": "Dragon",
-        "MAXHP": 100,
+    "Wizard": {
+        "Name": "Wizard",
+        "MAXHP": 500,
         "Attack": 8,
-        "Gold": 100,
-        "XP": [1000, 2000],
+        "Gold": [100, 200],
+        "XP": 1000,
+        "Terrain": ['tower_door'],
+        "Levels": [6, 7, 8, 9, 10],
         "Resistance": ["lightning", "lightning2"],
         "Immunity": ["fire", "fire2"]
-    },
+    }
 }
 
 enemy_list = [enemy for enemy in enemy_stats]

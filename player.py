@@ -31,6 +31,7 @@ classes = {
         'ethers': 100,
         'mid_ethers': 100,
         'high_ethers': 100,
+        'tents': 5,
         'attack': 100
     },
     'red_mage': {
@@ -46,6 +47,7 @@ classes = {
         'ethers': 1,
         'mid_ethers': 0,
         'high_ethers': 0,
+        'tents': 5,
         'attack': 8
     },
     'white_mage': {
@@ -61,6 +63,7 @@ classes = {
         'ethers': 1,
         'mid_ethers': 0,
         'high_ethers': 0,
+        'tents': 5,
         'attack': 8
     },
     'barbarian': {
@@ -76,6 +79,7 @@ classes = {
         'ethers': 1,
         'mid_ethers': 0,
         'high_ethers': 0,
+        'tents': 5,
         'attack': 20
     },
     'thief': {
@@ -91,6 +95,7 @@ classes = {
         'ethers': 1,
         'mid_ethers': 0,
         'high_ethers': 0,
+        'tents': 5,
         'attack': 8
     },
     'blue_mage': {
@@ -106,6 +111,7 @@ classes = {
         'ethers': 1,
         'mid_ethers': 0,
         'high_ethers': 0,
+        'tents': 5,
         'attack': 8
     }
 }
@@ -128,7 +134,6 @@ def level_up_check(player):
 
 class Player:
     """Player object containing all the player related stats"""
-    testing = True
 
     def __init__(self, player_type):
         self.name = ''
@@ -144,14 +149,16 @@ class Player:
         self.ethers = classes[player_type]['ethers']
         self.mid_ethers = classes[player_type]['mid_ethers']
         self.high_ethers = classes[player_type]['high_ethers']
-        self.tents = 0
+        self.tents = classes[player_type]['tents']
         self.attack = classes[player_type]['attack']
         self.player_type = player_type
         self.x = 0
         self.y = 0
         self.XP = 0
         self.level = 1
-        self.map = 'starting_map'
+        self.clayton = False
+        self.key = False
+        self.won = False
 
 
 def print_player_info(player):
@@ -164,7 +171,6 @@ def print_player_info(player):
     print(f"Gold: {player.gold}")
     print(f"Attack: {player.attack}")
     input("> ")
-    return player
 
 
 def print_items_list(player):
@@ -194,7 +200,8 @@ line = "--------------------"
 
 def use_inventory(player, fight=False):
     """Use available inventory items
-    :param player Player object for the current game"""
+    :param player Player object for the current game
+    :param fight True if player is in a battle"""
     clear()
     print(line)
     print("Inventory - Select which item to use")
@@ -217,33 +224,39 @@ def use_inventory(player, fight=False):
     match choice:
         case "1":
             if player.potions > 0:
-                player.HP += 10
-                print(f"{player.name} regained 10 HP")
+                amount = player.HP / 4
+                player.HP += amount
+                print(f"{player.name} regained {amount} HP")
                 player.potions -= 1
         case "2":
             if player.mid_potions > 0:
-                player.HP += 25
-                print(f"{player.name} regained 25 HP")
+                amount = player.HP / 2
+                player.HP += amount
+                print(f"{player.name} regained {amount} HP")
                 player.mid_potions -= 1
         case "3":
             if player.high_potions > 0:
-                player.HP += 50
-                print(f"{player.name} regained 50 HP")
+                amount = player.MAXHP - player.HP
+                player.HP = player.MAXHP
+                print(f"{player.name} regained {amount} HP")
                 player.high_potions -= 1
         case "4":
             if player.ethers > 0:
-                player.MP += 2
-                print(f"{player.name} regained 2 MP")
+                amount = player.MP / 4
+                player.MP += amount
+                print(f"{player.name} regained {amount} MP")
                 player.ethers -= 1
         case "5":
             if player.mid_ethers > 0:
-                player.MP += 5
-                print(f"{player.name} regained 5 MP")
+                amount = player.MP / 2
+                player.MP += amount
+                print(f"{player.name} regained {amount} MP")
                 player.mid_ethers -= 1
         case "6":
             if player.high_ethers > 0:
-                player.MP += 10
-                print(f"{player.name} regained 10 MP")
+                amount = player.MAXMP - player.MP
+                player.MP += amount
+                print(f"{player.name} regained {amount} MP")
                 player.high_ethers -= 1
         case "7":
             if player.tents > 0 and fight is False:
